@@ -11,7 +11,7 @@
 *.dylib
 
 # Krita files
-*.kra
+/assets/*.kra
 
 # Qt-es
 object_script.*.Release
