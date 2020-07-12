@@ -7,6 +7,7 @@ LIBS += -L/usr/lib -lSDL2_image
 
 SOURCES += \
         collision.cpp \
+        ecs/rendersystem.cpp \
         game.cpp \
         main.cpp \
         map.cpp \

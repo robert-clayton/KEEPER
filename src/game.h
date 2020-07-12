@@ -4,9 +4,17 @@
 #include <map>
 #include <functional>
 #include <vector>
+#include "map.h"
 #include "ecs/systems.h"
 
 using EventCallback = std::function<void(SDL_Event const&)>;
+
+struct Camera
+{
+    int x;
+    int y;
+    float zoom;
+};
 
 class Game
 {
@@ -15,7 +23,8 @@ public:
     static std::shared_ptr<SController> sController;
     static std::map<SDL_EventType, std::vector<EventCallback>> registeredCallbacks;
     static bool bIsRunning;
-    static SDL_Rect camera;
+    static Map* map;
+    static Camera camera;
 
     void Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
     void Update(float deltaSeconds);

@@ -1,5 +1,7 @@
 #pragma once
 #include "../vector2d.h"
+#include <vector>
+#include "ecs.h"
 #include <SDL2/SDL.h>
 
 struct CTransform
@@ -7,6 +9,12 @@ struct CTransform
     Vector2D position;
     Vector2D scale;
     int layer;
+};
+
+struct CTile
+{
+    std::vector<Entity> entities;
+    bool bIsWalkable;
 };
 
 struct CSprite
