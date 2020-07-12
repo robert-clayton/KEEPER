@@ -1,8 +1,11 @@
 #include "map.h"
 #include "game.h"
 #include <random>
+#include "vector3d.h"
 
 extern Coordinator coordinator;
+
+int Map::heightOffset;
 
 int lvl1[80][25] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -127,26 +130,27 @@ void Map::LoadMap(int arr[80][25])
     }
 }
 
-Vector2D Map::GetRandomTilePos()
+Vector3D Map::GetRandomTilePos()
 {
     std::uniform_int_distribution<int> randX(0, 79);
     std::uniform_int_distribution<int> randY(0, 24);
-    Vector2D position = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
-    return Vector2D(position.x, position.y - heightOffset);
+    Vector3D position = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
+    return Vector3D(position.x, position.y, 0.0f);
 }
 
-Vector2D Map::TileToWorldSpace(const int& x, const int& y)
+Vector3D Map::TileToWorldSpace(const int& x, const int& y)
 {
-    return Vector2D((x - y) * 40, (y + x) * 20);
+    return Vector3D((x - y) * 40, (y + x) * 20, heightOffset);
 }
 
-Vector2D Map::TileToWorldSpace(const Vector2D& position)
+Vector3D Map::TileToWorldSpace(const Vector3D& position)
 {
     return TileToWorldSpace(position.x, position.y);
 }
 
-Vector2D Map::WorldToTileSpace(const Vector2D& position)
+Vector3D Map::WorldToTileSpace(const Vector3D& position)
 {
-    return Vector2D((position.x / 40 + position.y / 20) / 2,
-                position.y / 20 - (position.x / 40 + position.y / 20) / 2);
+    return Vector3D((position.x / 40 + position.y / 20) / 2,
+                position.y / 20 - (position.x / 40 + position.y / 20) / 2,
+                heightOffset);
 }

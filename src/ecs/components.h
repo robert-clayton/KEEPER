@@ -1,4 +1,5 @@
 #pragma once
+#include "../vector3d.h"
 #include "../vector2d.h"
 #include <vector>
 #include "ecs.h"
@@ -6,7 +7,7 @@
 
 struct CTransform
 {
-    Vector2D position;
+    Vector3D position;
     Vector2D scale;
     int layer;
     bool bIsDirty;
@@ -17,7 +18,7 @@ struct CTransform
         bIsDirty = false;
         layer = 0;
     }
-    CTransform(Vector2D position_)
+    CTransform(Vector3D position_)
     {
         position = position_;
         scale.x = scale.y = 1;
@@ -52,6 +53,6 @@ struct CAIController
 {
     bool bIsActive;
     bool bIsMoving;
-    Vector2D targetPosition;
-    Vector2D moveDirection;
+    Vector3D targetPosition;
+    Vector3D moveDirection;
 };

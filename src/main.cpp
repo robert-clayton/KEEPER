@@ -30,7 +30,7 @@ int main()
         }
         else
             deltaSeconds = frameDifference / 1000.0f;
-        std::cout << frameDifference << "ms" << std::endl;
+//        std::cout << frameDifference << "ms" << std::endl;
     }
     game->Clean();
     return 0;

@@ -15,7 +15,7 @@ void SRenderer::Update(float deltaSeconds)
         if (transform.bIsDirty || Game::camera.bIsDirty)
         {
             sprite.dest.x = transform.position.x - sprite.dest.w / 2 - Game::camera.position.x;
-            sprite.dest.y = transform.position.y - sprite.dest.h / 2 - Game::camera.position.y;
+            sprite.dest.y = transform.position.y + transform.position.z - sprite.dest.h / 2 - Game::camera.position.y;
             transform.bIsDirty = false;
         }
         DrawTexture(sprite.texture, sprite.src, sprite.dest);

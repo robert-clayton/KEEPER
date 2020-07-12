@@ -115,7 +115,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         coordinator.AddComponent(entity, CAIController{
                     .bIsActive = true,
                     .bIsMoving = false,
-                    .targetPosition = Vector2D()
+                    .targetPosition = Vector3D()
                     });
         coordinator.AddComponent(entity, CStats{
                     .health = 100,

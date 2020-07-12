@@ -11,12 +11,12 @@ public:
 
     void LoadMap(int arr[80][25]);
     void DrawMap();
-    class Vector2D GetRandomTilePos();
-    static class Vector2D TileToWorldSpace(const int& x, const int& y);
-    static class Vector2D TileToWorldSpace(const class Vector2D& position);
-    static class Vector2D WorldToTileSpace(const class Vector2D& position);
+    class Vector3D GetRandomTilePos();
+    static class Vector3D TileToWorldSpace(const int& x, const int& y);
+    static class Vector3D TileToWorldSpace(const class Vector3D& position);
+    static class Vector3D WorldToTileSpace(const class Vector3D& position);
 private:
-    int heightOffset;
+    static int heightOffset;
     std::vector<SDL_Texture*> textures;
     Entity map[80][25];
 };

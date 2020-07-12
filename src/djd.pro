@@ -12,7 +12,8 @@ SOURCES += \
         game.cpp \
         main.cpp \
         map.cpp \
-        vector2d.cpp
+        vector2d.cpp \
+        vector3d.cpp
 
 HEADERS += \
     animation.h \
@@ -25,4 +26,5 @@ HEADERS += \
     ecs/systems.h \
     game.h \
     map.h \
-    vector2d.h
+    vector2d.h \
+    vector3d.h
