@@ -116,7 +116,7 @@ void Map::LoadMap(int arr[80][25])
             tile = coordinator.CreateEntity();
             map[row][col] = tile;
             coordinator.AddComponent(tile, tileComp);
-            coordinator.AddComponent(tile, CTransform{ .position = Vector2D(col, row)});
+            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(col, row)));
             coordinator.AddComponent(tile, CSprite{
                             .texture = textures.at(arr[row][col]),
                             .src = srcRect,
@@ -128,8 +128,23 @@ void Map::LoadMap(int arr[80][25])
 
 Vector2D Map::GetRandomTilePos()
 {
-    std::uniform_int_distribution<int> randX(0, 25);
-    std::uniform_int_distribution<int> randY(0, 80);
+    std::uniform_int_distribution<int> randX(0, 79);
+    std::uniform_int_distribution<int> randY(0, 24);
+    return coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
+}
 
-    return Vector2D(randX(Game::generator), randY(Game::generator));
+Vector2D Map::TileToWorldSpace(const int& x, const int& y)
+{
+    return Vector2D((x - y) * 40, (y + x) * 20);
+}
+
+Vector2D Map::TileToWorldSpace(const Vector2D& position)
+{
+    return TileToWorldSpace(position.x, position.y);
+}
+
+Vector2D Map::WorldToTileSpace(const Vector2D& position)
+{
+    return Vector2D((position.x / 40 + position.y / 20) / 2,
+                position.y / 20 - (position.x / 40 + position.y / 20) / 2);
 }

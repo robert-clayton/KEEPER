@@ -1,6 +1,7 @@
 #include "rendersystem.h"
 #include "../game.h"
 #include <algorithm>
+
 extern Coordinator coordinator;
 
 void SRenderer::Update(float deltaSeconds)
@@ -11,11 +12,20 @@ void SRenderer::Update(float deltaSeconds)
     {
         auto& transform = coordinator.GetComponent<CTransform>(entity);
         auto& sprite = coordinator.GetComponent<CSprite>(entity);
-        Vector2D screenSpace = WorldToScreenSpace(transform.position);
-        sprite.dest.x = screenSpace.x - sprite.dest.w / 2 - Game::camera.x;
-        sprite.dest.y = screenSpace.y - sprite.dest.h / 2 - Game::camera.y;
+        if (transform.bIsDirty || Game::camera.bIsDirty)
+        {
+//            Vector2D screenSpace = Game::WorldToScreenSpace(transform.position);
+//            sprite.dest.x = screenSpace.x - sprite.dest.w / 2 - Game::camera.x;
+
+//            sprite.dest.y = screenSpace.y - sprite.dest.h / 2 - Game::camera.y;
+            sprite.dest.x = transform.position.x - sprite.dest.w / 2 - Game::camera.x;
+            sprite.dest.y = transform.position.y - sprite.dest.h / 2 - Game::camera.y;
+            transform.bIsDirty = false;
+        }
+
         DrawTexture(sprite.texture, sprite.src, sprite.dest);
     }
+    Game::camera.bIsDirty = false;
     SDL_RenderPresent(renderer);
 }
 
@@ -53,9 +63,4 @@ void SRenderer::Clean()
 void SRenderer::SetZoom(float zoom)
 {
     SDL_RenderSetScale(renderer, zoom, zoom);
-}
-
-Vector2D SRenderer::WorldToScreenSpace(Vector2D position)
-{
-    return Vector2D(position.x * 40 - position.y * 40, (position.x + position.y) * 20);
 }

@@ -10,17 +10,16 @@ using EventCallback = std::function<void(SDL_Event const&)>;
 
 Coordinator coordinator;
 Camera Game::camera;
-
 std::shared_ptr<SRenderer> Game::sRenderer;
 std::shared_ptr<SController> Game::sController;
 std::map<SDL_EventType, std::vector<EventCallback>> Game::registeredCallbacks;
 std::default_random_engine Game::generator;
-Map* Game::map;
+std::unique_ptr<Map> Game::map;
 bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
-    camera = {0,0,1.0};
+    camera = {0,0,1.0, true};
     // ECS
     coordinator.Init();
     coordinator.RegisterComponent<CTransform>();
@@ -40,7 +39,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     else
         bIsRunning = false;
 
-    // Event registering
+    // Event registration
     RegisterEvent(SDL_QUIT, [](SDL_Event const& event){
         (void)event;
         bIsRunning = false;
@@ -48,6 +47,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     RegisterEvent(SDL_MOUSEWHEEL, [](SDL_Event const& event){
 
         camera.zoom += .25 * event.wheel.y;
+        camera.bIsDirty = true;
         sRenderer->SetZoom(camera.zoom);
     });
     RegisterEvent(SDL_KEYDOWN, [](SDL_Event const& event){
@@ -55,15 +55,19 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         {
         case SDLK_w:
             camera.y -= 100 * camera.zoom;
+            camera.bIsDirty = true;
             break;
         case SDLK_s:
             camera.y += 100 * camera.zoom;
+            camera.bIsDirty = true;
             break;
         case SDLK_a:
             camera.x -= 100 * camera.zoom;
+            camera.bIsDirty = true;
             break;
         case SDLK_d:
             camera.x += 100 * camera.zoom;
+            camera.bIsDirty = true;
             break;
         default:
             break;
@@ -92,7 +96,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     signature.set(coordinator.GetComponentType<CSprite>());
     coordinator.SetSystemSignature<SRenderer>(signature);
 
-    map = new Map();
+    map = coordinator.make_unique<Map>();
 
     std::vector<Entity> entities(10000);
     for (auto& entity : entities)
@@ -110,13 +114,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
                     .stamina = 100,
                     .speed = 5
                     });
-        coordinator.AddComponent(
-                    entity,
-                    CTransform{
-                        .position = map->GetRandomTilePos(),
-                        .scale = Vector2D(1,1),
-                        .layer = 1
-                    });
+        coordinator.AddComponent(entity, CTransform(map->GetRandomTilePos()));
         coordinator.AddComponent(
                     entity,
                     CSprite{
@@ -168,3 +166,15 @@ void Game::Clean()
     SDL_Quit();
     std::cout << "Game Cleaned!" << std::endl;
 }
+
+Vector2D Game::ScreenToWorldSpace(const Vector2D& position)
+{
+    return Vector2D((position.x - position.y) * 40, (position.y + position.x) * 20);
+}
+
+Vector2D Game::WorldToScreenSpace(const Vector2D& position)
+{
+    return Vector2D((position.x / 40 + position.y / 20) / 2,
+                position.y / 20 - (position.x / 40 + position.y / 20) / 2);
+}
+

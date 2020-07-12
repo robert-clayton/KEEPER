@@ -9,6 +9,21 @@ struct CTransform
     Vector2D position;
     Vector2D scale;
     int layer;
+    bool bIsDirty;
+
+    CTransform()
+    {
+        scale.x = scale.y = 1;
+        bIsDirty = false;
+        layer = 0;
+    }
+    CTransform(Vector2D position_)
+    {
+        position = position_;
+        scale.x = scale.y = 1;
+        bIsDirty = true;
+        layer = 0;
+    }
 };
 
 struct CTile

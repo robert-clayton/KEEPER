@@ -17,5 +17,4 @@ public:
     void DrawTexture(SDL_Texture* tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void Clean();
     void SetZoom(float zoom);
-    Vector2D WorldToScreenSpace(Vector2D position);
 };

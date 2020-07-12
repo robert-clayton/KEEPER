@@ -1,6 +1,7 @@
 #include "controllersystem.h"
 #include "components.h"
 #include "../game.h"
+#include "../map.h"
 
 void SController::Update(float deltaSeconds)
 {
@@ -23,7 +24,8 @@ void SController::Update(float deltaSeconds)
         }
         else
         {
-            transform.position += aiController.moveDirection* stats.speed * deltaSeconds;
+            transform.position += aiController.moveDirection * stats.speed * deltaSeconds;
+            transform.bIsDirty = true;
         }
     }
 }
