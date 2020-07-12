@@ -10,6 +10,9 @@
 *.dll
 *.dylib
 
+# Krita files
+*.kra
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
