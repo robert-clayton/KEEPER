@@ -16,6 +16,7 @@ public:
     static class Vector2D TileToWorldSpace(const class Vector2D& position);
     static class Vector2D WorldToTileSpace(const class Vector2D& position);
 private:
+    int heightOffset;
     std::vector<SDL_Texture*> textures;
     Entity map[80][25];
 };

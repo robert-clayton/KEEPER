@@ -109,6 +109,7 @@ void Map::LoadMap(int arr[80][25])
     CTile tileComp = CTile{.bIsWalkable = true};
     SDL_Rect srcRect = SDL_Rect{.x=50, .y=50, .w=500, .h=500};
     SDL_Rect destRect = SDL_Rect{.w=80, .h=80};
+    heightOffset = destRect.h / 2;
     for (int row = 0; row < 80; row++)
     {
         for (int col = 0; col < 25; col++)
@@ -130,7 +131,8 @@ Vector2D Map::GetRandomTilePos()
 {
     std::uniform_int_distribution<int> randX(0, 79);
     std::uniform_int_distribution<int> randY(0, 24);
-    return coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
+    Vector2D position = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
+    return Vector2D(position.x, position.y - heightOffset);
 }
 
 Vector2D Map::TileToWorldSpace(const int& x, const int& y)

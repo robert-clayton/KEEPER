@@ -13,7 +13,7 @@ int main()
     float deltaSeconds = 0.0f;
 
     game = new Game();
-    game->Init("KEEPER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 800, false);
+    game->Init("KEEPER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, false);
     while (game->bIsRunning)
     {
         frameStart = SDL_GetTicks();

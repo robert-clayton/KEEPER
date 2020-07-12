@@ -19,7 +19,7 @@ bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
-    camera = {0,0,1.0, true};
+    camera = {Vector2D(-width, 0), 1, true};
     // ECS
     coordinator.Init();
     coordinator.RegisterComponent<CTransform>();
@@ -44,29 +44,39 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         (void)event;
         bIsRunning = false;
     });
+    RegisterEvent(SDL_MOUSEBUTTONDOWN, [this](SDL_Event const& event){
+        (void)event;
+        this->bIsMouseButtonDown = true;
+    });
+    RegisterEvent(SDL_MOUSEBUTTONUP, [this](SDL_Event const& event){
+        (void)event;
+        this->bIsMouseButtonDown = false;
+    });
+    RegisterEvent(SDL_MOUSEMOTION, [this](SDL_Event const& event){
+        camera.position += Vector2D(-event.motion.xrel, -event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
+        camera.bIsDirty = bIsMouseButtonDown;
+    });
     RegisterEvent(SDL_MOUSEWHEEL, [](SDL_Event const& event){
-
-        camera.zoom += .25 * event.wheel.y;
+        camera.zoom *= (.9 * (float)(event.wheel.y < 0)) + (1.1 * (float)(event.wheel.y > 0));
         camera.bIsDirty = true;
-        sRenderer->SetZoom(camera.zoom);
     });
     RegisterEvent(SDL_KEYDOWN, [](SDL_Event const& event){
         switch(event.key.keysym.sym)
         {
         case SDLK_w:
-            camera.y -= 100 * camera.zoom;
+            camera.position.y -= 100;
             camera.bIsDirty = true;
             break;
         case SDLK_s:
-            camera.y += 100 * camera.zoom;
+            camera.position.y += 100;
             camera.bIsDirty = true;
             break;
         case SDLK_a:
-            camera.x -= 100 * camera.zoom;
+            camera.position.x -= 100;
             camera.bIsDirty = true;
             break;
         case SDLK_d:
-            camera.x += 100 * camera.zoom;
+            camera.position.x += 100;
             camera.bIsDirty = true;
             break;
         default:
@@ -112,7 +122,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
                     .mana = 0,
                     .ki = 0,
                     .stamina = 100,
-                    .speed = 5
+                    .speed = 50
                     });
         coordinator.AddComponent(entity, CTransform(map->GetRandomTilePos()));
         coordinator.AddComponent(

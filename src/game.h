@@ -11,14 +11,15 @@ using EventCallback = std::function<void(SDL_Event const&)>;
 
 struct Camera
 {
-    int x;
-    int y;
+    Vector2D position;
     float zoom;
     bool bIsDirty;
 };
 
 class Game
 {
+private:
+    bool bIsMouseButtonDown = false;
 public:
     static std::shared_ptr<SRenderer> sRenderer;
     static std::shared_ptr<SController> sController;

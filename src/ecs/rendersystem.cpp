@@ -14,18 +14,17 @@ void SRenderer::Update(float deltaSeconds)
         auto& sprite = coordinator.GetComponent<CSprite>(entity);
         if (transform.bIsDirty || Game::camera.bIsDirty)
         {
-//            Vector2D screenSpace = Game::WorldToScreenSpace(transform.position);
-//            sprite.dest.x = screenSpace.x - sprite.dest.w / 2 - Game::camera.x;
-
-//            sprite.dest.y = screenSpace.y - sprite.dest.h / 2 - Game::camera.y;
-            sprite.dest.x = transform.position.x - sprite.dest.w / 2 - Game::camera.x;
-            sprite.dest.y = transform.position.y - sprite.dest.h / 2 - Game::camera.y;
+            sprite.dest.x = transform.position.x - sprite.dest.w / 2 - Game::camera.position.x;
+            sprite.dest.y = transform.position.y - sprite.dest.h / 2 - Game::camera.position.y;
             transform.bIsDirty = false;
         }
-
         DrawTexture(sprite.texture, sprite.src, sprite.dest);
     }
-    Game::camera.bIsDirty = false;
+    if (Game::camera.bIsDirty)
+    {
+        SetZoom(Game::camera.zoom);
+        Game::camera.bIsDirty = false;
+    }
     SDL_RenderPresent(renderer);
 }
 
