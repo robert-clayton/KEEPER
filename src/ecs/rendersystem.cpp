@@ -12,10 +12,18 @@ void SRenderer::Update(float deltaSeconds)
     {
         auto& transform = coordinator.GetComponent<CTransform>(entity);
         auto& sprite = coordinator.GetComponent<CSprite>(entity);
+
         if (transform.bIsDirty || Game::camera.bIsDirty)
         {
-            sprite.dest.x = transform.position.x - sprite.dest.w / 2 - Game::camera.position.x;
-            sprite.dest.y = transform.position.y + transform.position.z - sprite.dest.h / 2 - Game::camera.position.y;
+            sprite.dest.x = transform.position.x
+                    - sprite.dest.w / 2
+                    - Game::camera.position.x;
+            sprite.dest.y = transform.position.y
+                    + transform.position.z
+                    - sprite.dest.h / 2
+                    - Game::camera.position.y;
+            if (transform.tile && *transform.tile == entity)
+                sprite.dest.y += coordinator.GetComponent<CTile>(entity).heightOffset;
             transform.bIsDirty = false;
         }
         DrawTexture(sprite.texture, sprite.src, sprite.dest);

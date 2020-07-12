@@ -7,6 +7,7 @@
 
 struct CTransform
 {
+    std::shared_ptr<Entity> tile;
     Vector3D position;
     Vector2D scale;
     int layer;
@@ -25,12 +26,27 @@ struct CTransform
         bIsDirty = true;
         layer = 0;
     }
+    CTransform(Vector3D position_, std::shared_ptr<Entity> tile_)
+    {
+        tile = tile_;
+        position = position_;
+        scale.x = scale.y = 1;
+        bIsDirty = true;
+        layer = 0;
+    }
 };
 
 struct CTile
 {
-    std::vector<Entity> entities;
+    std::vector<std::shared_ptr<Entity>> entities;
+    Vector2D position;
     bool bIsWalkable;
+    float heightOffset;
+};
+
+struct CCreature
+{
+
 };
 
 struct CSprite
@@ -53,6 +69,7 @@ struct CAIController
 {
     bool bIsActive;
     bool bIsMoving;
+    std::shared_ptr<Entity> targetTile;
     Vector3D targetPosition;
     Vector3D moveDirection;
 };

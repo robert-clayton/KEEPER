@@ -7,7 +7,7 @@ extern Coordinator coordinator;
 
 int Map::heightOffset;
 
-int lvl1[80][25] = {
+int lvl1[25][25] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -32,62 +32,7 @@ int lvl1[80][25] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 Map::Map()
@@ -109,18 +54,17 @@ Map::~Map()
 void Map::LoadMap(int arr[80][25])
 {
     Entity tile;
-    CTile tileComp = CTile{.bIsWalkable = true};
     SDL_Rect srcRect = SDL_Rect{.x=50, .y=50, .w=500, .h=500};
     SDL_Rect destRect = SDL_Rect{.w=80, .h=80};
     heightOffset = destRect.h / 2;
-    for (int row = 0; row < 80; row++)
+    for (int row = 0; row < 25; row++)
     {
         for (int col = 0; col < 25; col++)
         {
             tile = coordinator.CreateEntity();
-            map[row][col] = tile;
-            coordinator.AddComponent(tile, tileComp);
-            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(col, row)));
+            map[row][col] = std::make_shared<Entity>(tile);
+            coordinator.AddComponent(tile, CTile{.position = Vector2D(row, col), .bIsWalkable = true, .heightOffset = 40});
+            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), std::make_shared<Entity>(tile)));
             coordinator.AddComponent(tile, CSprite{
                             .texture = textures.at(arr[row][col]),
                             .src = srcRect,
@@ -130,17 +74,24 @@ void Map::LoadMap(int arr[80][25])
     }
 }
 
+std::shared_ptr<Entity> Map::GetRandomTile()
+{
+    std::uniform_int_distribution<int> randX(0, 24);
+    std::uniform_int_distribution<int> randY(0, 24);
+    return map[randX(Game::generator)][randY(Game::generator)];
+}
+
 Vector3D Map::GetRandomTilePos()
 {
-    std::uniform_int_distribution<int> randX(0, 79);
+    std::uniform_int_distribution<int> randX(0, 24);
     std::uniform_int_distribution<int> randY(0, 24);
-    Vector3D position = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
-    return Vector3D(position.x, position.y, 0.0f);
+    Vector3D pos = coordinator.GetComponent<CTransform>(*map[randX(Game::generator)][randY(Game::generator)]).position;
+    return Vector3D(pos.x, pos.y, 0);
 }
 
 Vector3D Map::TileToWorldSpace(const int& x, const int& y)
 {
-    return Vector3D((x - y) * 40, (y + x) * 20, heightOffset);
+    return Vector3D((x - y) * 40, (y + x) * 20, 0);
 }
 
 Vector3D Map::TileToWorldSpace(const Vector3D& position)
@@ -148,9 +99,16 @@ Vector3D Map::TileToWorldSpace(const Vector3D& position)
     return TileToWorldSpace(position.x, position.y);
 }
 
-Vector3D Map::WorldToTileSpace(const Vector3D& position)
+Vector2D Map::WorldToTileSpace(const Vector3D& position)
 {
-    return Vector3D((position.x / 40 + position.y / 20) / 2,
-                position.y / 20 - (position.x / 40 + position.y / 20) / 2,
-                heightOffset);
+    return Vector2D(
+                (int)((position.x / 40 + position.y / 20) / 2),
+                (int)(position.y / 20 - (position.x / 40 + position.y / 20) / 2)
+                );
+}
+
+std::shared_ptr<Entity> Map::TileAt(const Vector3D& position)
+{
+    Vector2D location = WorldToTileSpace(position);
+    return map[(int)location.x][(int)location.y];
 }

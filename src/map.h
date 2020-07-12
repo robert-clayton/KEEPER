@@ -3,20 +3,24 @@
 #include <SDL2/SDL.h>
 #include "ecs/ecs.h"
 
+class Vector3D;
+
 class Map
 {
 public:
     Map();
     ~Map();
 
-    void LoadMap(int arr[80][25]);
+    void LoadMap(int arr[25][25]);
     void DrawMap();
-    class Vector3D GetRandomTilePos();
-    static class Vector3D TileToWorldSpace(const int& x, const int& y);
-    static class Vector3D TileToWorldSpace(const class Vector3D& position);
-    static class Vector3D WorldToTileSpace(const class Vector3D& position);
+    std::shared_ptr<Entity> GetRandomTile();
+    Vector3D GetRandomTilePos();
+    Vector3D TileToWorldSpace(const int& x, const int& y);
+    Vector3D TileToWorldSpace(const Vector3D& position);
+    Vector2D WorldToTileSpace(const Vector3D& position);
+    std::shared_ptr<Entity> TileAt(const Vector3D& position);
 private:
     static int heightOffset;
     std::vector<SDL_Texture*> textures;
-    Entity map[80][25];
+    std::shared_ptr<Entity> map[25][25];
 };

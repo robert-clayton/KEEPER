@@ -27,6 +27,11 @@ Vector3D Vector3D::DirectionTo(const Vector3D& other)
     return (other - *this).Normalized();
 }
 
+Vector3D Vector3D::DirectionTo(const Vector2D& other)
+{
+    return (other - *this).Normalized();
+}
+
 float Vector3D::DistanceTo(const Vector3D& other)
 {
     return std::sqrt(std::pow(other.x - this->x, 2)

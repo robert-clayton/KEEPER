@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+class Vector2D;
+
 class Vector3D
 {
 public:
@@ -14,7 +16,9 @@ public:
     Vector3D(float x, float y, float z);
 
     Vector3D DirectionTo(const Vector3D& other);
+    Vector3D DirectionTo(const Vector2D& other);
     float DistanceTo(const Vector3D& other);
+
     Vector3D Normalized();
     bool AlmostEqual(const Vector3D& other);
 
@@ -52,7 +56,7 @@ public:
     bool operator!=(const Vector3D& other);
 
     Vector3D& Zero();
-    class Vector2D To2D();
+    Vector2D To2D();
 
     friend std::ostream& operator<<(std::ostream& stream, const Vector3D& vec);
 };

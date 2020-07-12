@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+class Vector3D;
+
 class Vector2D
 {
 public:
@@ -12,6 +14,7 @@ public:
     Vector2D(float x, float y);
 
     Vector2D DirectionTo(const Vector2D& other);
+    Vector3D DirectionTo(const Vector3D& other);
     float DistanceTo(const Vector2D& other);
     Vector2D Normalized();
     bool AlmostEqual(const Vector2D& other);
@@ -30,6 +33,9 @@ public:
     friend Vector2D operator-(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D operator*(const Vector2D& v1, const Vector2D& v2);
     friend Vector2D operator/(const Vector2D& v1, const Vector2D& v2);
+
+    friend Vector3D operator+(const Vector2D& v1, const Vector3D& v2);
+    friend Vector3D operator-(const Vector2D& v1, const Vector3D& v2);
 
     friend Vector2D operator*(const Vector2D& v1, const float& other);
     friend Vector2D operator/(const Vector2D& v1, const float& other);

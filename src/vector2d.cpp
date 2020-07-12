@@ -1,4 +1,5 @@
 #include "vector2d.h"
+#include "vector3d.h"
 #include <cmath>
 
 Vector2D::Vector2D()
@@ -14,6 +15,11 @@ Vector2D::Vector2D(float x, float y)
 }
 
 Vector2D Vector2D::DirectionTo(const Vector2D& other)
+{
+    return (other - *this).Normalized();
+}
+
+Vector3D Vector2D::DirectionTo(const Vector3D& other)
 {
     return (other - *this).Normalized();
 }
@@ -113,6 +119,16 @@ Vector2D operator*(const Vector2D& v1, const Vector2D& v2)
 Vector2D operator/(const Vector2D& v1, const Vector2D& v2)
 {
     return Vector2D(v1.x / v2.x, v1.y / v2.y);
+}
+
+Vector3D operator+(const Vector2D& v1, const Vector3D& v2)
+{
+    return Vector3D(v1.x + v2.x, v1.y + v2.y, v2.z);
+}
+
+Vector3D operator-(const Vector2D& v1, const Vector3D& v2)
+{
+    return Vector3D(v1.x - v2.x, v1.y - v2.y, v2.z);
 }
 
 Vector2D operator*(const Vector2D& v1, const float& other)

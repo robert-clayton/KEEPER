@@ -19,7 +19,8 @@ bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
-    camera = {Vector2D(-width, 0), 1, true};
+//    camera = {Vector2D(-width, 0), 1, true};
+    camera = {Vector2D(0, 0), 1, true};
     // ECS
     coordinator.Init();
     coordinator.RegisterComponent<CTransform>();
@@ -49,12 +50,15 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         this->bIsMouseButtonDown = true;
     });
     RegisterEvent(SDL_MOUSEBUTTONUP, [this](SDL_Event const& event){
-        (void)event;
+        if (!this->bIsDragging)
+            std::cout << coordinator.GetComponent<CTile>(*map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)))).position << std::endl;
         this->bIsMouseButtonDown = false;
+        this->bIsDragging = false;
     });
     RegisterEvent(SDL_MOUSEMOTION, [this](SDL_Event const& event){
         camera.position += Vector2D(-event.motion.xrel, -event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
-        camera.bIsDirty = bIsMouseButtonDown;
+        camera.bIsDirty = (camera.bIsDirty && !bIsMouseButtonDown) || bIsMouseButtonDown;
+        this->bIsDragging = bIsMouseButtonDown;
     });
     RegisterEvent(SDL_MOUSEWHEEL, [](SDL_Event const& event){
         camera.zoom *= (.9 * (float)(event.wheel.y < 0)) + (1.1 * (float)(event.wheel.y > 0));
@@ -108,14 +112,13 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(10000);
+    std::vector<Entity> entities(1);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
         coordinator.AddComponent(entity, CAIController{
                     .bIsActive = true,
-                    .bIsMoving = false,
-                    .targetPosition = Vector3D()
+                    .bIsMoving = false
                     });
         coordinator.AddComponent(entity, CStats{
                     .health = 100,
@@ -179,12 +182,5 @@ void Game::Clean()
 
 Vector2D Game::ScreenToWorldSpace(const Vector2D& position)
 {
-    return Vector2D((position.x - position.y) * 40, (position.y + position.x) * 20);
+    return (position / camera.zoom) + camera.position;
 }
-
-Vector2D Game::WorldToScreenSpace(const Vector2D& position)
-{
-    return Vector2D((position.x / 40 + position.y / 20) / 2,
-                position.y / 20 - (position.x / 40 + position.y / 20) / 2);
-}
-

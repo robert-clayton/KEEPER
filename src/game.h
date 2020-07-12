@@ -20,6 +20,7 @@ class Game
 {
 private:
     bool bIsMouseButtonDown = false;
+    bool bIsDragging = false;
 public:
     static std::shared_ptr<SRenderer> sRenderer;
     static std::shared_ptr<SController> sController;
@@ -35,6 +36,5 @@ public:
     void Clean();
     void HandleEvents();
     static void RegisterEvent(SDL_EventType type, EventCallback callback);
-    static class Vector2D WorldToScreenSpace(const class Vector2D& position);
     static class Vector2D ScreenToWorldSpace(const class Vector2D& position);
 };
