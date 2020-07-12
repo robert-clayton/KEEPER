@@ -4,6 +4,7 @@
 #include <map>
 #include <functional>
 #include <vector>
+#include <random>
 #include "map.h"
 #include "ecs/systems.h"
 
@@ -22,6 +23,7 @@ public:
     static std::shared_ptr<SRenderer> sRenderer;
     static std::shared_ptr<SController> sController;
     static std::map<SDL_EventType, std::vector<EventCallback>> registeredCallbacks;
+    static std::default_random_engine generator;
     static bool bIsRunning;
     static Map* map;
     static Camera camera;

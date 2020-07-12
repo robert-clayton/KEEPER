@@ -1,5 +1,6 @@
 #include "map.h"
 #include "game.h"
+#include <random>
 
 extern Coordinator coordinator;
 
@@ -115,15 +116,20 @@ void Map::LoadMap(int arr[80][25])
             tile = coordinator.CreateEntity();
             map[row][col] = tile;
             coordinator.AddComponent(tile, tileComp);
-            coordinator.AddComponent(tile, CTransform{
-                     .position = Vector2D(400 + col * 40 - row * 40, 200 + (row + col) * 20)
-                 });
+            coordinator.AddComponent(tile, CTransform{ .position = Vector2D(col, row)});
             coordinator.AddComponent(tile, CSprite{
                             .texture = textures.at(arr[row][col]),
                             .src = srcRect,
                             .dest = destRect,
                         });
-
         }
     }
+}
+
+Vector2D Map::GetRandomTilePos()
+{
+    std::uniform_int_distribution<int> randX(0, 25);
+    std::uniform_int_distribution<int> randY(0, 80);
+
+    return Vector2D(randX(Game::generator), randY(Game::generator));
 }

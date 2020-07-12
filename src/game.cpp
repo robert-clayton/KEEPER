@@ -14,6 +14,7 @@ Camera Game::camera;
 std::shared_ptr<SRenderer> Game::sRenderer;
 std::shared_ptr<SController> Game::sController;
 std::map<SDL_EventType, std::vector<EventCallback>> Game::registeredCallbacks;
+std::default_random_engine Game::generator;
 Map* Game::map;
 bool Game::bIsRunning = false;
 
@@ -53,16 +54,16 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         switch(event.key.keysym.sym)
         {
         case SDLK_w:
-            camera.y -= 100;
+            camera.y -= 100 * camera.zoom;
             break;
         case SDLK_s:
-            camera.y += 100;
+            camera.y += 100 * camera.zoom;
             break;
         case SDLK_a:
-            camera.x -= 100;
+            camera.x -= 100 * camera.zoom;
             break;
         case SDLK_d:
-            camera.x += 100;
+            camera.x += 100 * camera.zoom;
             break;
         default:
             break;
@@ -93,10 +94,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = new Map();
 
-    std::vector<Entity> entities(100);
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> randPosX(0.0f, width);
-    std::uniform_real_distribution<float> randPosY(0.0f, height);
+    std::vector<Entity> entities(10000);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
@@ -115,7 +113,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         coordinator.AddComponent(
                     entity,
                     CTransform{
-                        .position = Vector2D(randPosX(generator), randPosY(generator)),
+                        .position = map->GetRandomTilePos(),
                         .scale = Vector2D(1,1),
                         .layer = 1
                     });

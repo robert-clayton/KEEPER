@@ -38,4 +38,5 @@ struct CAIController
     bool bIsActive;
     bool bIsMoving;
     Vector2D targetPosition;
+    Vector2D moveDirection;
 };

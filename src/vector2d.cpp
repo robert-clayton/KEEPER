@@ -26,7 +26,17 @@ float Vector2D::DistanceTo(const Vector2D& other)
 Vector2D Vector2D::Normalized()
 {
     float length = std::sqrt(std::pow(this->x, 2) + std::pow(this->y, 2));
-    return *this / length;
+    if (length)
+        return *this / length;
+    else
+        return *this;
+}
+
+bool Vector2D::AlmostEqual(const Vector2D& other)
+{
+    if (DistanceTo(other) < 0.01)
+        return true;
+    return false;
 }
 
 Vector2D& Vector2D::Add(const Vector2D& other)
@@ -163,6 +173,20 @@ Vector2D& Vector2D::operator*=(const int& other)
 Vector2D& Vector2D::operator/=(const int& other)
 {
     return this->Divide(other);
+}
+
+bool Vector2D::operator==(const Vector2D& other)
+{
+    if (this->x == other.x && this->y == other.y)
+        return true;
+    return false;
+}
+
+bool Vector2D::operator!=(const Vector2D& other)
+{
+    if (this->x != other.x || this->y != other.y)
+        return true;
+    return false;
 }
 
 Vector2D& Vector2D::Zero()

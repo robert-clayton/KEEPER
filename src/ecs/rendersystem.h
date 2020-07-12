@@ -9,11 +9,6 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
 
-    static bool LayerComparison(const CTransform& a, const CTransform& b)
-    {
-        return a.layer < b.layer;
-    }
-
 public:
     void Update(float deltaSeconds);
 
@@ -22,4 +17,5 @@ public:
     void DrawTexture(SDL_Texture* tex, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void Clean();
     void SetZoom(float zoom);
+    Vector2D WorldToScreenSpace(Vector2D position);
 };

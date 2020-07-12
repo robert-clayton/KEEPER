@@ -14,6 +14,7 @@ public:
     Vector2D DirectionTo(const Vector2D& other);
     float DistanceTo(const Vector2D& other);
     Vector2D Normalized();
+    bool AlmostEqual(const Vector2D& other);
 
     Vector2D& Add(const Vector2D& other);
     Vector2D& Subtract(const Vector2D& other);
@@ -44,6 +45,9 @@ public:
     Vector2D& operator/=(const float& other);
     Vector2D& operator*=(const int& other);
     Vector2D& operator/=(const int& other);
+
+    bool operator==(const Vector2D& other);
+    bool operator!=(const Vector2D& other);
 
     Vector2D& Zero();
 
