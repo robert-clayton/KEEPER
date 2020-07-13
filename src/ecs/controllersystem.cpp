@@ -12,16 +12,16 @@ void SController::Update(float deltaSeconds)
         auto& stats = coordinator.GetComponent<CStats>(entity);
         if (!aiController.bIsMoving)
         {
-            aiController.targetTile = Game::map->GetRandomTile();
+            transform.tile = Game::map->GetRandomTile();
             aiController.moveDirection = transform.position.DirectionTo(
-                        coordinator.GetComponent<CTransform>(*aiController.targetTile).position);
+                        coordinator.GetComponent<CTransform>(*transform.tile).position);
             aiController.bIsMoving = true;
         }
-        if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(*aiController.targetTile).position) < stats.speed * deltaSeconds)
+        if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(*transform.tile).position) < stats.speed * deltaSeconds)
         {
             aiController.bIsMoving = false;
             aiController.moveDirection.Zero();
-            transform.position = coordinator.GetComponent<CTransform>(*aiController.targetTile).position;
+            transform.position = coordinator.GetComponent<CTransform>(*transform.tile).position;
         }
         else
         {

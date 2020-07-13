@@ -69,7 +69,5 @@ struct CAIController
 {
     bool bIsActive;
     bool bIsMoving;
-    std::shared_ptr<Entity> targetTile;
-    Vector3D targetPosition;
     Vector3D moveDirection;
 };

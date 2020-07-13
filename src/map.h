@@ -8,6 +8,10 @@ class Vector3D;
 class Map
 {
 public:
+    static int heightOffset;
+    std::vector<SDL_Texture*> textures;
+    std::shared_ptr<Entity> map[25][25];
+
     Map();
     ~Map();
 
@@ -19,8 +23,4 @@ public:
     Vector3D TileToWorldSpace(const Vector3D& position);
     Vector2D WorldToTileSpace(const Vector3D& position);
     std::shared_ptr<Entity> TileAt(const Vector3D& position);
-private:
-    static int heightOffset;
-    std::vector<SDL_Texture*> textures;
-    std::shared_ptr<Entity> map[25][25];
 };

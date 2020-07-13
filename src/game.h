@@ -36,5 +36,6 @@ public:
     void Clean();
     void HandleEvents();
     static void RegisterEvent(SDL_EventType type, EventCallback callback);
-    static class Vector2D ScreenToWorldSpace(const class Vector2D& position);
+    static Vector2D ScreenToWorldSpace(const class Vector2D& position);
+    static Vector2D MouseEventToWorldSpace(const SDL_Event& event);
 };

@@ -51,7 +51,14 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     });
     RegisterEvent(SDL_MOUSEBUTTONUP, [this](SDL_Event const& event){
         if (!this->bIsDragging)
-            std::cout << coordinator.GetComponent<CTile>(*map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)))).position << std::endl;
+        {
+            std::shared_ptr<Entity> tile = map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)));
+            if (tile)
+            {
+                coordinator.GetComponent<CSprite>(*tile).texture = map->textures.at(1);
+                std::cout << coordinator.GetComponent<CTile>(*map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)))).position << std::endl;
+            }
+        }
         this->bIsMouseButtonDown = false;
         this->bIsDragging = false;
     });

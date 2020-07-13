@@ -110,5 +110,8 @@ Vector2D Map::WorldToTileSpace(const Vector3D& position)
 std::shared_ptr<Entity> Map::TileAt(const Vector3D& position)
 {
     Vector2D location = WorldToTileSpace(position);
-    return map[(int)location.x][(int)location.y];
+    if ((int)location.x >= 0 && (int)location.x < 25 && (int)location.y >= 0 && (int)location.y < 25)
+        return map[(int)location.x][(int)location.y];
+    else
+        return nullptr;
 }
