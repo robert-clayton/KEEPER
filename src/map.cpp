@@ -62,9 +62,9 @@ void Map::LoadMap(int arr[80][25])
         for (int col = 0; col < 25; col++)
         {
             tile = coordinator.CreateEntity();
-            map[row][col] = std::make_shared<Entity>(tile);
+            map[row][col] = tile;
             coordinator.AddComponent(tile, CTile{.position = Vector2D(row, col), .bIsWalkable = true, .heightOffset = 40});
-            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), std::make_shared<Entity>(tile)));
+            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), tile));
             coordinator.AddComponent(tile, CSprite{
                             .texture = textures.at(arr[row][col]),
                             .src = srcRect,
@@ -74,7 +74,7 @@ void Map::LoadMap(int arr[80][25])
     }
 }
 
-std::shared_ptr<Entity> Map::GetRandomTile()
+Entity Map::GetRandomTile()
 {
     std::uniform_int_distribution<int> randX(0, 24);
     std::uniform_int_distribution<int> randY(0, 24);
@@ -85,7 +85,7 @@ Vector3D Map::GetRandomTilePos()
 {
     std::uniform_int_distribution<int> randX(0, 24);
     std::uniform_int_distribution<int> randY(0, 24);
-    Vector3D pos = coordinator.GetComponent<CTransform>(*map[randX(Game::generator)][randY(Game::generator)]).position;
+    Vector3D pos = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
     return Vector3D(pos.x, pos.y, 0);
 }
 
@@ -107,11 +107,13 @@ Vector2D Map::WorldToTileSpace(const Vector3D& position)
                 );
 }
 
-std::shared_ptr<Entity> Map::TileAt(const Vector3D& position)
+bool Map::TileAt(Entity& tile, const Vector3D& position)
 {
     Vector2D location = WorldToTileSpace(position);
     if ((int)location.x >= 0 && (int)location.x < 25 && (int)location.y >= 0 && (int)location.y < 25)
-        return map[(int)location.x][(int)location.y];
-    else
-        return nullptr;
+    {
+        tile = map[(int)location.x][(int)location.y];
+        return true;
+    }
+    return false;
 }

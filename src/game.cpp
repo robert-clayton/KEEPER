@@ -52,11 +52,11 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     RegisterEvent(SDL_MOUSEBUTTONUP, [this](SDL_Event const& event){
         if (!this->bIsDragging)
         {
-            std::shared_ptr<Entity> tile = map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)));
-            if (tile)
+            Entity tile;
+            bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)));
+            if (bTileExists)
             {
-                coordinator.GetComponent<CSprite>(*tile).texture = map->textures.at(1);
-                std::cout << coordinator.GetComponent<CTile>(*map->TileAt(ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)))).position << std::endl;
+                coordinator.GetComponent<CSprite>(tile).texture = map->textures.at(1);
             }
         }
         this->bIsMouseButtonDown = false;
@@ -105,7 +105,6 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         }
     });
 
-
     Signature signature;
     signature.set(coordinator.GetComponentType<CTransform>());
     signature.set(coordinator.GetComponentType<CAIController>());
@@ -119,7 +118,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(1);
+    std::vector<Entity> entities(10);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
@@ -132,9 +131,14 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
                     .mana = 0,
                     .ki = 0,
                     .stamina = 100,
-                    .speed = 50
+                    .speed = 150
                     });
-        coordinator.AddComponent(entity, CTransform(map->GetRandomTilePos()));
+        Entity tile = map->GetRandomTile();
+        coordinator.AddComponent(
+                    entity,
+                    CTransform(
+                        coordinator.GetComponent<CTransform>(tile).position,
+                        tile));
         coordinator.AddComponent(
                     entity,
                     CSprite{
@@ -152,6 +156,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
                             .h = 40,
                         }
                     });
+        coordinator.GetComponent<CTile>(tile).entities.emplace(entity);
     }
 }
 
@@ -190,4 +195,9 @@ void Game::Clean()
 Vector2D Game::ScreenToWorldSpace(const Vector2D& position)
 {
     return (position / camera.zoom) + camera.position;
+}
+
+Vector2D Game::MouseEventToWorldSpace(const SDL_Event& event)
+{
+    return ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y));
 }

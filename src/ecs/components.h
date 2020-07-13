@@ -7,7 +7,7 @@
 
 struct CTransform
 {
-    std::shared_ptr<Entity> tile;
+    Entity tile;
     Vector3D position;
     Vector2D scale;
     int layer;
@@ -26,7 +26,7 @@ struct CTransform
         bIsDirty = true;
         layer = 0;
     }
-    CTransform(Vector3D position_, std::shared_ptr<Entity> tile_)
+    CTransform(Vector3D position_, Entity tile_)
     {
         tile = tile_;
         position = position_;
@@ -38,7 +38,7 @@ struct CTransform
 
 struct CTile
 {
-    std::vector<std::shared_ptr<Entity>> entities;
+    std::set<Entity> entities;
     Vector2D position;
     bool bIsWalkable;
     float heightOffset;

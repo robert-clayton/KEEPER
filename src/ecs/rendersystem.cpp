@@ -22,7 +22,7 @@ void SRenderer::Update(float deltaSeconds)
                     + transform.position.z
                     - sprite.dest.h / 2
                     - Game::camera.position.y;
-            if (transform.tile && *transform.tile == entity)
+            if (transform.tile == entity)
                 sprite.dest.y += coordinator.GetComponent<CTile>(entity).heightOffset;
             transform.bIsDirty = false;
         }
