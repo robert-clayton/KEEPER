@@ -1,6 +1,7 @@
 #include "rendersystem.h"
 #include "../game.h"
 #include <algorithm>
+#include <SDL2/SDL_image.h>
 
 extern Coordinator coordinator;
 
@@ -45,7 +46,7 @@ void SRenderer::CreateWindowRenderer(const char* title, int xPos, int yPos, int 
 
 SDL_Texture* SRenderer::LoadTexture(const char *fileName)
 {
-    std::string assetPath = "/home/robert/Documents/Repos/KEEPER/assets/";
+    std::string assetPath = "E:/Repos/KEEPER/assets/";
     assetPath += fileName;
     SDL_Surface* tempSurface = IMG_Load(assetPath.c_str());
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tempSurface);

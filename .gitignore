@@ -11,6 +11,7 @@
 *.dylib
 
 .vscode
+dist
 
 # Krita files
 /assets/*.kra
