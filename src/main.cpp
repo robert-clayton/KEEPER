@@ -1,9 +1,9 @@
 #include "game.h"
 #include <iostream>
 
-Game *game = nullptr;
+// Game *game = nullptr;
 
-int main()
+int main(int argv, char** args)
 {
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
@@ -12,7 +12,7 @@ int main()
     Uint32 frameDifference;
     float deltaSeconds = 0.0f;
 
-    game = new Game();
+    Game *game = new Game();
     game->Init("KEEPER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, false);
     while (game->bIsRunning)
     {
