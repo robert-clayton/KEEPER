@@ -5,8 +5,8 @@ $SDLIncludePath = "E:\Development\SDL2\include"
 $SDLLibPath = "E:\Development\SDL2\lib"
 
 $SourcePrivate = @(
-    "E:\Repos\KEEPER\src\*.cpp",
-    "E:\Repos\KEEPER\src\ecs\*.cpp"
+    "$PSScriptRoot\src\*.cpp",
+    "$PSScriptRoot\src\ecs\*.cpp"
 )
 $SourcePublic = @(
     "$PSScriptRoot\src",
@@ -17,7 +17,7 @@ $SourcePublic = @(
 New-Item -ItemType Directory -Force -Path $OutputPath | Out-Null
 
 # Construct g++ command
-$Command = "g++ -g "
+$Command = "g++ -pipe -g "
 ForEach ($Item in $SourcePrivate) {
     $Command += "$Item "
 }
