@@ -22,6 +22,7 @@ ForEach ($Item in $SourcePrivate) {
     $Command += "$Item "
 }
 $Command += "-o " + $OutputPath + $OutputName + " "
+# $Command += "-c -o '$PSScriptRoot\dist' "
 ForEach ($Item in $SourcePublic) {
     $Command += "-I$Item "
 }
@@ -29,3 +30,4 @@ $Command += "-I$SDLIncludePath -L$SDLLibPath -lmingw32 -lSDL2main -lSDL2 -lSDL2_
 
 Write-Host $Command
 Invoke-Expression $Command
+Invoke-Expression "$OutputPath$OutputName"

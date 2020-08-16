@@ -41,7 +41,28 @@ struct CTile
     std::set<Entity> entities;
     Vector2D position;
     bool bIsWalkable;
-    float heightOffset;
+    float cost;
+
+    CTile()
+    {
+        bIsWalkable = true;
+        cost = 1;
+    }
+
+    CTile(Vector2D position)
+    {
+        this->position = position;
+        bIsWalkable = true;
+        cost = 1;
+    }
+
+    CTile(std::set<Entity> entities, Vector2D position, bool bIsWalkable, float cost)
+    {
+        this->entities = entities;
+        this->position = position;
+        this->bIsWalkable = bIsWalkable;
+        this->cost = cost;
+    }
 };
 
 struct CCreature
@@ -54,6 +75,7 @@ struct CSprite
     SDL_Texture* texture;
     SDL_Rect src;
     SDL_Rect dest;
+    Vector2D renderOffset;
 };
 
 struct CStats

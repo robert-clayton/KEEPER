@@ -63,12 +63,13 @@ void Map::LoadMap(int arr[80][25])
         {
             tile = coordinator.CreateEntity();
             map[row][col] = tile;
-            coordinator.AddComponent(tile, CTile{.position = Vector2D(row, col), .bIsWalkable = true, .heightOffset = 40});
+            coordinator.AddComponent(tile, CTile(Vector2D(row, col)));
             coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), tile));
             coordinator.AddComponent(tile, CSprite{
                             .texture = textures.at(arr[row][col]),
                             .src = srcRect,
                             .dest = destRect,
+                            .renderOffset = Vector2D(0,40),
                         });
         }
     }

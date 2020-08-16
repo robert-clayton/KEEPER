@@ -17,14 +17,14 @@ void SRenderer::Update(float deltaSeconds)
         if (transform.bIsDirty || Game::camera.bIsDirty)
         {
             sprite.dest.x = transform.position.x
+                    + sprite.renderOffset.x
                     - sprite.dest.w / 2
                     - Game::camera.position.x;
             sprite.dest.y = transform.position.y
+                    + sprite.renderOffset.y
                     + transform.position.z
                     - sprite.dest.h / 2
                     - Game::camera.position.y;
-            if (transform.tile == entity)
-                sprite.dest.y += coordinator.GetComponent<CTile>(entity).heightOffset;
             transform.bIsDirty = false;
         }
         DrawTexture(sprite.texture, sprite.src, sprite.dest);
