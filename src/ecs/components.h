@@ -1,6 +1,7 @@
 #pragma once
-#include "../vector3d.h"
-#include "../vector2d.h"
+#include "../math/float3.h"
+#include "../math/float2.h"
+#include "../math/int2.h"
 #include <vector>
 #include "ecs.h"
 #include <SDL2/SDL.h>
@@ -8,8 +9,8 @@
 struct CTransform
 {
     Entity tile;
-    Vector3D position;
-    Vector2D scale;
+    float3 position;
+    float2 scale;
     int layer;
     bool bIsDirty;
 
@@ -19,14 +20,14 @@ struct CTransform
         bIsDirty = false;
         layer = 0;
     }
-    CTransform(Vector3D position_)
+    CTransform(float3 position_)
     {
         position = position_;
         scale.x = scale.y = 1;
         bIsDirty = true;
         layer = 0;
     }
-    CTransform(Vector3D position_, Entity tile_)
+    CTransform(float3 position_, Entity tile_)
     {
         tile = tile_;
         position = position_;
@@ -39,24 +40,24 @@ struct CTransform
 struct CTile
 {
     std::set<Entity> entities;
-    Vector2D position;
+    int2 position;
     bool bIsWalkable;
     float cost;
 
     CTile()
     {
-        bIsWalkable = true;
-        cost = 1;
+        this->bIsWalkable = true;
+        this->cost = 1;
     }
 
-    CTile(Vector2D position)
+    CTile(int2 position)
     {
         this->position = position;
-        bIsWalkable = true;
-        cost = 1;
+        this->bIsWalkable = true;
+        this->cost = 1;
     }
 
-    CTile(std::set<Entity> entities, Vector2D position, bool bIsWalkable, float cost)
+    CTile(std::set<Entity> entities, int2 position, bool bIsWalkable, float cost)
     {
         this->entities = entities;
         this->position = position;
@@ -64,7 +65,7 @@ struct CTile
         this->cost = cost;
     }
 
-    CTile(Vector2D position, bool bIsWalkable, float cost)
+    CTile(int2 position, bool bIsWalkable, float cost)
     {
         this->position = position;
         this->bIsWalkable = bIsWalkable;
@@ -82,7 +83,7 @@ struct CSprite
     SDL_Texture* texture;
     SDL_Rect src;
     SDL_Rect dest;
-    Vector2D renderOffset;
+    float2 renderOffset;
 };
 
 struct CStats
@@ -98,5 +99,5 @@ struct CAIController
 {
     bool bIsActive;
     bool bIsMoving;
-    Vector3D moveDirection;
+    float3 moveDirection;
 };

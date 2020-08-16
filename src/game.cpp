@@ -3,6 +3,8 @@
 #include "ecs/components.h"
 #include "ecs/systems.h"
 #include "ecs/ecs.h"
+#include "math/float2.h"
+#include "math/float3.h"
 #include <random>
 #include <map.h>
 
@@ -19,8 +21,7 @@ bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
-//    camera = {Vector2D(-width, 0), 1, true};
-    camera = {Vector2D(0, 0), 1, true};
+    camera = {float2(0, 0), 1, true};
     // ECS
     coordinator.Init();
     coordinator.RegisterComponent<CTransform>();
@@ -53,7 +54,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         if (!this->bIsDragging)
         {
             Entity tile;
-            bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y)));
+            bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(float2(event.motion.x, event.motion.y)));
             if (bTileExists)
             {
                 coordinator.GetComponent<CSprite>(tile).texture = map->textures.at(1);
@@ -63,7 +64,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         this->bIsDragging = false;
     });
     RegisterEvent(SDL_MOUSEMOTION, [this](SDL_Event const& event){
-        camera.position += Vector2D(-event.motion.xrel, -event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
+        camera.position += float2(-event.motion.xrel, -event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
         camera.bIsDirty = (camera.bIsDirty && !bIsMouseButtonDown) || bIsMouseButtonDown;
         this->bIsDragging = bIsMouseButtonDown;
     });
@@ -192,12 +193,12 @@ void Game::Clean()
     std::cout << "Game Cleaned!" << std::endl;
 }
 
-Vector2D Game::ScreenToWorldSpace(const Vector2D& position)
+float2 Game::ScreenToWorldSpace(const float2& position)
 {
     return (position / camera.zoom) + camera.position;
 }
 
-Vector2D Game::MouseEventToWorldSpace(const SDL_Event& event)
+float2 Game::MouseEventToWorldSpace(const SDL_Event& event)
 {
-    return ScreenToWorldSpace(Vector2D(event.motion.x, event.motion.y));
+    return ScreenToWorldSpace(float2(event.motion.x, event.motion.y));
 }

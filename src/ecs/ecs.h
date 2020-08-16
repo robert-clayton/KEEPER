@@ -7,7 +7,7 @@
 #include <memory>
 #include <unordered_map>
 #include <SDL2/SDL.h>
-#include "../vector2d.h"
+#include "../math/float2.h"
 
 using Entity = std::uint_fast32_t;
 const Entity MAX_ENTITIES = 1000000;
@@ -17,8 +17,8 @@ using Signature = std::bitset<MAX_COMPONENTS>;
 
 struct Transform
 {
-    Vector2D position;
-    Vector2D scale;
+    float2 position;
+    float2 scale;
 };
 
 class EntityManager

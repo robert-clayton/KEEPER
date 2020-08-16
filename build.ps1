@@ -6,18 +6,20 @@ $SDLLibPath = "E:\Development\SDL2\lib"
 
 $SourcePrivate = @(
     "$PSScriptRoot\src\*.cpp",
-    "$PSScriptRoot\src\ecs\*.cpp"
+    "$PSScriptRoot\src\ecs\*.cpp",
+    "$PSScriptRoot\src\math\*.cpp"
 )
 $SourcePublic = @(
     "$PSScriptRoot\src",
-    "$PSScriptRoot\src\ecs"
+    "$PSScriptRoot\src\ecs",
+    "$PSScriptRoot\src\math"
 )
 
 # Ensure output path exists
 New-Item -ItemType Directory -Force -Path $OutputPath | Out-Null
 
 # Construct g++ command
-$Command = "g++ -pipe -g "
+$Command = "g++ -std=c++17 -O3 -g "
 ForEach ($Item in $SourcePrivate) {
     $Command += "$Item "
 }
@@ -30,4 +32,4 @@ $Command += "-I$SDLIncludePath -L$SDLLibPath -lmingw32 -lSDL2main -lSDL2 -lSDL2_
 
 Write-Host $Command
 Invoke-Expression $Command
-Invoke-Expression "$OutputPath$OutputName"
+# Invoke-Expression "$OutputPath$OutputName"

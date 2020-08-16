@@ -11,7 +11,7 @@ using EventCallback = std::function<void(SDL_Event const&)>;
 
 struct Camera
 {
-    Vector2D position;
+    float2 position;
     float zoom;
     bool bIsDirty;
 };
@@ -36,6 +36,6 @@ public:
     void Clean();
     void HandleEvents();
     static void RegisterEvent(SDL_EventType type, EventCallback callback);
-    static Vector2D ScreenToWorldSpace(const class Vector2D& position);
-    static Vector2D MouseEventToWorldSpace(const SDL_Event& event);
+    static float2 ScreenToWorldSpace(const class float2& position);
+    static float2 MouseEventToWorldSpace(const SDL_Event& event);
 };
