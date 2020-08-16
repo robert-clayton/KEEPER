@@ -63,6 +63,13 @@ struct CTile
         this->bIsWalkable = bIsWalkable;
         this->cost = cost;
     }
+
+    CTile(Vector2D position, bool bIsWalkable, float cost)
+    {
+        this->position = position;
+        this->bIsWalkable = bIsWalkable;
+        this->cost = cost;
+    }
 };
 
 struct CCreature
