@@ -112,9 +112,9 @@ struct CAIController
     float3 moveDirection;
     std::vector<Entity> movePath;
 
-    CAIController()
+    CAIController(bool bIsActive=true)
     {
-        this->bIsActive = true;
+        this->bIsActive = bIsActive;
         this->bIsMoving = false;
         this->moveDirection = float3();
     }
