@@ -9,6 +9,8 @@ void SRenderer::Update(float deltaSeconds)
 {
     (void)deltaSeconds;
     SDL_RenderClear(renderer);
+    std::map<int, std::map<int, std::set<CSprite*>>> renderLayers;
+
     for (auto const& entity : entities)
     {
         auto& transform = coordinator.GetComponent<CTransform>(entity);
@@ -27,8 +29,12 @@ void SRenderer::Update(float deltaSeconds)
                     - Game::camera.position.y;
             transform.bIsDirty = false;
         }
-        DrawTexture(sprite.texture, sprite.src, sprite.dest);
+        renderLayers[sprite.renderLayer][sprite.dest.y].insert(&sprite);
     }
+    for (const auto& layer : renderLayers)
+        for (const auto& sublayer : layer.second)
+            for (const auto& sprite : sublayer.second)
+                    DrawTexture(sprite->texture, sprite->src, sprite->dest);
     if (Game::camera.bIsDirty)
     {
         SetZoom(Game::camera.zoom);

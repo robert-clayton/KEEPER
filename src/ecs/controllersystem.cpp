@@ -7,14 +7,15 @@
 
 void SController::Update(float deltaSeconds)
 {
-    //Uint32 start = SDL_GetTicks();
+    /*
     for (auto const& entity : entities)
         futures.push_back(Game::threadPool.enqueue([&] { DoMovement(entity, deltaSeconds); }));
     for (auto& fut : futures)
         fut.get();
     futures.clear();
-    //Uint32 end = SDL_GetTicks();
-    //SDL_Log("%dms", start - end);
+    */
+    for (auto const& entity : entities)
+        DoMovement(entity, deltaSeconds);
 }
 
 void SController::DoMovement(const Entity entity, float deltaSeconds)

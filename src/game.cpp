@@ -121,7 +121,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(1000);
+    std::vector<Entity> entities(10);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
@@ -134,7 +134,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
                         coordinator.GetComponent<CTransform>(tile).position,
                         tile));
         coordinator.AddComponent(entity, CSprite{sRenderer->LoadTexture("deer_sheet.png"), 
-                                SDL_Rect{0, 0, 8, 8}, SDL_Rect{0, 0, 40, 40}});
+                                SDL_Rect{0, 0, 8, 8}, SDL_Rect{0, 0, 40, 40}, float2(0,0), 1});
         coordinator.GetComponent<CTile>(tile).entities.emplace(entity);
     }
 }

@@ -2,6 +2,8 @@
 #include "ecs.h"
 #include "components.h"
 #include <SDL_image.h>
+#include <map>
+#include <set>
 
 class SRenderer : public System
 {

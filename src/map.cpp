@@ -66,7 +66,7 @@ void Map::LoadMap(int arr[25][25])
             map[row][col] = tile;
             coordinator.AddComponent(tile, CTile(int2(row, col)));
             coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), tile));
-            coordinator.AddComponent(tile, CSprite{textures.at(arr[row][col]), srcRect, destRect, float2(0.0f,40.0f)});
+            coordinator.AddComponent(tile, CSprite{textures.at(arr[row][col]), srcRect, destRect, float2(0.0f,40.0f), 0});
         }
     }
 }

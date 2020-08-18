@@ -84,6 +84,7 @@ struct CSprite
     SDL_Rect src;
     SDL_Rect dest;
     float2 renderOffset;
+    int renderLayer;
 };
 
 struct CStats
