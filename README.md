@@ -4,6 +4,7 @@
 
 # TODO
 - [x] Worker threads that await jobs in the ECS
+    - [ ] Fix race condition relating to coordinator entities
 - [ ] Add awareness of nearby entities to entities with CAIController
 - [ ] Boid alg and some sort of CFlock struct to store relevant data
 - [ ] Create node system to chunkify world map for A* pathfinding
