@@ -6,10 +6,13 @@
 
 void SController::Update(float deltaSeconds)
 {
+    Uint32 start = SDL_GetTicks();
     for (auto const& entity : entities)
     {
         DoMovement(entity, deltaSeconds);
     }
+    Uint32 end = SDL_GetTicks();
+    SDL_Log("Time spent updating SController: %dms", end - start);
 }
 
 void SController::DoMovement(const Entity entity, float deltaSeconds)
