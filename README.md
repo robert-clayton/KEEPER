@@ -2,6 +2,13 @@
 
 ### An Undertaking of a Turn-Based Combat World Simulation
 
+- The primary goal of KEEPER is to learn new things
+- The secondary goal of KEEPER is to produce something of a combination between Wakfu and a world simulation
+- Isometric because isometric wins
+- Making my own engine for the sake of learning what it requires me to do
+    - Data Oriented Entity Component System (Multithreading WIP)
+- Built on top of the SDL2 framework with---currently---no other dependencies
+
 # TODO
 - [x] Worker threads that await jobs in the ECS
     - [ ] Fix race condition relating to coordinator entities
