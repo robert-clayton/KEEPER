@@ -4,7 +4,7 @@
 #include "../math/int2.h"
 #include <vector>
 #include "ecs.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 struct CTransform
 {
@@ -93,6 +93,15 @@ struct CStats
     int ki;
     int stamina;
     int speed;
+
+    CStats()
+    {
+        this->health = 5;
+        this->mana = 0;
+        this->ki = 0;
+        this->stamina = 5;
+        this->speed = 150;
+    }
 };
 
 struct CAIController
@@ -100,4 +109,12 @@ struct CAIController
     bool bIsActive;
     bool bIsMoving;
     float3 moveDirection;
+    std::vector<Entity> movePath;
+
+    CAIController()
+    {
+        this->bIsActive = true;
+        this->bIsMoving = false;
+        this->moveDirection = float3();
+    }
 };

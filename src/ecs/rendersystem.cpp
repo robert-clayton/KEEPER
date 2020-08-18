@@ -1,7 +1,7 @@
 #include "rendersystem.h"
 #include "../game.h"
 #include <algorithm>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 extern Coordinator coordinator;
 

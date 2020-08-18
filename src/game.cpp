@@ -1,12 +1,12 @@
 #include "game.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include "ecs/components.h"
 #include "ecs/systems.h"
 #include "ecs/ecs.h"
 #include "math/float2.h"
 #include "math/float3.h"
 #include <random>
-#include <map.h>
+#include "map.h"
 
 using EventCallback = std::function<void(SDL_Event const&)>;
 
@@ -54,7 +54,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         if (!this->bIsDragging)
         {
             Entity tile;
-            bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(float2(event.motion.x, event.motion.y)));
+            bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(float2((float)event.motion.x, (float)event.motion.y)));
             if (bTileExists)
             {
                 coordinator.GetComponent<CSprite>(tile).texture = map->textures.at(1);
@@ -64,12 +64,12 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         this->bIsDragging = false;
     });
     RegisterEvent(SDL_MOUSEMOTION, [this](SDL_Event const& event){
-        camera.position += float2(-event.motion.xrel, -event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
+        camera.position += float2((float)-event.motion.xrel, (float)-event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
         camera.bIsDirty = (camera.bIsDirty && !bIsMouseButtonDown) || bIsMouseButtonDown;
         this->bIsDragging = bIsMouseButtonDown;
     });
     RegisterEvent(SDL_MOUSEWHEEL, [](SDL_Event const& event){
-        camera.zoom *= (.9 * (float)(event.wheel.y < 0)) + (1.1 * (float)(event.wheel.y > 0));
+        camera.zoom *= (.9f * (float)(event.wheel.y < 0)) + (1.1f * (float)(event.wheel.y > 0));
         camera.bIsDirty = true;
     });
     RegisterEvent(SDL_KEYDOWN, [](SDL_Event const& event){
@@ -119,44 +119,20 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(20000);
+    std::vector<Entity> entities(200);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
-        coordinator.AddComponent(entity, CAIController{
-                    .bIsActive = true,
-                    .bIsMoving = false
-                    });
-        coordinator.AddComponent(entity, CStats{
-                    .health = 100,
-                    .mana = 0,
-                    .ki = 0,
-                    .stamina = 100,
-                    .speed = 150
-                    });
+        coordinator.AddComponent(entity, CAIController());
+        coordinator.AddComponent(entity, CStats());
         Entity tile = map->GetRandomTile();
         coordinator.AddComponent(
                     entity,
                     CTransform(
                         coordinator.GetComponent<CTransform>(tile).position,
                         tile));
-        coordinator.AddComponent(
-                    entity,
-                    CSprite{
-                        .texture = sRenderer->LoadTexture("deer_sheet.png"),
-                        .src = SDL_Rect{
-                            .x = 0,
-                            .y = 0,
-                            .w = 8,
-                            .h = 8
-                        },
-                        .dest = SDL_Rect{
-                            .x = 0,
-                            .y = 0,
-                            .w = 40,
-                            .h = 40,
-                        }
-                    });
+        coordinator.AddComponent(entity, CSprite{sRenderer->LoadTexture("deer_sheet.png"), 
+                                SDL_Rect{0, 0, 8, 8}, SDL_Rect{0, 0, 40, 40}});
         coordinator.GetComponent<CTile>(tile).entities.emplace(entity);
     }
 }
@@ -200,5 +176,5 @@ float2 Game::ScreenToWorldSpace(const float2& position)
 
 float2 Game::MouseEventToWorldSpace(const SDL_Event& event)
 {
-    return ScreenToWorldSpace(float2(event.motion.x, event.motion.y));
+    return ScreenToWorldSpace(float2((float)event.motion.x, (float)event.motion.y));
 }

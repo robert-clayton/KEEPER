@@ -5,8 +5,9 @@
 #include <assert.h>
 #include <set>
 #include <memory>
+#include <array>
 #include <unordered_map>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "../math/float2.h"
 
 using Entity = std::uint_fast32_t;

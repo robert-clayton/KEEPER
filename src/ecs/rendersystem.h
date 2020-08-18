@@ -1,7 +1,7 @@
 #pragma once
 #include "ecs.h"
 #include "components.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 class SRenderer : public System
 {

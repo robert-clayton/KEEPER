@@ -2,6 +2,7 @@
 #include "int2.h"
 #include "float3.h"
 #include <cmath>
+#include <sstream>
 
 float2::float2()
 {
@@ -216,6 +217,13 @@ float2& float2::Zero()
 int2 float2::ToInt()
 {
     return int2((int)this->x, (int)this->y);
+}
+
+std::string float2::ToStr()
+{
+    std::ostringstream oss;
+    oss << "(" << this->x << ", " << this->y << ")";
+    return oss.str();
 }
 
 std::ostream& operator<<(std::ostream& stream, const float2& vec)

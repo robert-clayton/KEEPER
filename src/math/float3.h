@@ -57,6 +57,7 @@ public:
 
     float3& Zero();
     float2 To2D();
+    std::string ToStr();
 
     friend std::ostream& operator<<(std::ostream& stream, const float3& vec);
 };

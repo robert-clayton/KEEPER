@@ -10,6 +10,12 @@
 *.dll
 *.dylib
 
+*.sln
+*.vcxproj
+*.filters
+*.user
+x64
+.vs
 .vscode
 dist
 

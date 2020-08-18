@@ -1,8 +1,11 @@
 #include "map.h"
 #include "game.h"
 #include <random>
+#include <array>
 #include "math/float3.h"
-#include "stack"
+#include "math/int2.h"
+#include <stack>
+#include <sstream>
 
 extern Coordinator coordinator;
 
@@ -53,8 +56,8 @@ Map::~Map()
 void Map::LoadMap(int arr[25][25])
 {
     Entity tile;
-    SDL_Rect srcRect = SDL_Rect{.x=50, .y=50, .w=500, .h=500};
-    SDL_Rect destRect = SDL_Rect{.w=80, .h=80};
+    SDL_Rect srcRect = SDL_Rect{50, 50, 500, 500};
+    SDL_Rect destRect = SDL_Rect{0, 0, 80, 80};
     for (int row = 0; row < 25; row++)
     {
         for (int col = 0; col < 25; col++)
@@ -63,12 +66,7 @@ void Map::LoadMap(int arr[25][25])
             map[row][col] = tile;
             coordinator.AddComponent(tile, CTile(int2(row, col)));
             coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), tile));
-            coordinator.AddComponent(tile, CSprite{
-                            .texture = textures.at(arr[row][col]),
-                            .src = srcRect,
-                            .dest = destRect,
-                            .renderOffset = float2(0,40),
-                        });
+            coordinator.AddComponent(tile, CSprite{textures.at(arr[row][col]), srcRect, destRect, float2(0.0f,40.0f)});
         }
     }
 }
@@ -90,10 +88,10 @@ float3 Map::GetRandomTilePos()
 
 float3 Map::TileToWorldSpace(const int& x, const int& y)
 {
-    return float3((x - y) * 40, (y + x) * 20, 0);
+    return float3((x - y) * 40.0f, (y + x) * 20.0f, 0.0f);
 }
 
-float3 Map::TileToWorldSpace(const float3& position)
+float3 Map::TileToWorldSpace(const int2& position)
 {
     return TileToWorldSpace(position.x, position.y);
 }
@@ -117,90 +115,57 @@ bool Map::TileAt(Entity& tile, const float3& position)
     return false;
 }
 
-
-bool Map::FindPath(std::vector<Entity>& Path, Entity& start, Entity& dest)
+bool Map::TileAt(Entity& tile, const int2& position)
 {
-    CTile* startTile = &coordinator.GetComponent<CTile>(start);
-    CTile* destTile = &coordinator.GetComponent<CTile>(dest);
-    if (!destTile->bIsWalkable || startTile->position == destTile->position)
-        return false;
-    bool checkedList[25][25] = { false };
-
-    std::array<std::array<Node, 25>, 25> allMap;
-    for (int x = 0; x < 25; x++)
+    if (position.x >= 0 && position.x < 25 && position.y >= 0 && position.y < 25)
     {
-        for (int y = 0; y < 25; y++)
-        {
-            allMap[x][y].tile = &map[x][y];
-            
-        }
+        tile = map[position.x][position.y];
+        return true;
     }
+    return false;
+}
 
-    allMap[startTile->position.x][startTile->position.y].gCost = 0.0f;
-    allMap[startTile->position.x][startTile->position.y].hCost = 0.0f;
-    allMap[startTile->position.x][startTile->position.y].fCost = 0.0f;
-    allMap[startTile->position.x][startTile->position.y].tile = &start;
+bool Map::FindPath(std::vector<Entity>& Path, const Entity& start, const Entity& dest)
+{
+    std::map<Entity, Entity> cameFrom;
+    std::map<Entity, float> gCost{ {start, 0.0f} };
+    std::map<Entity, float> fCost{ {start, 0.0f} };
+    auto cmp = [&fCost](Entity a, Entity b) { return fCost.at(a) < fCost.at(b); };
+    std::set<Entity, decltype(cmp)> openSet{ { start }, cmp };
 
-    std::vector<Node> openList;
-    openList.emplace_back(allMap[startTile->position.x][startTile->position.y]);
-    Node curNode;
-    int2 *pos;
-    while (!openList.empty() && openList.size() < 25 * 25)
+    Entity current;
+    int2 curTilePos;
+    int2 destTilePos = coordinator.GetComponent<CTile>(dest).position;
+    Entity* neighbor;
+    CTile* neighborTile;
+    std::set<Entity>::iterator iter;
+    float gCostTemp = 0.0f;
+    while (!openSet.empty())
     {
-        do
+        iter = openSet.begin();
+        if (*iter == dest) {
+            Path = MakePath(cameFrom, dest);
+            return true;
+        }
+        current = *iter;
+        openSet.erase(iter);
+        curTilePos = coordinator.GetComponent<CTile>(current).position;
+        for (int x = -1; x <= 1; x++)
         {
-            float temp = __FLT_MAX__;
-            std::vector<Node>::iterator iterNode;
-            for (std::vector<Node>::iterator it = openList.begin(); it != openList.end(); it = next(it))
+            for (int y = -1; y <= 1; y++)
             {
-                Node nextNode = *it;
-                if (nextNode.fCost < temp)
+                if (curTilePos.x + x < 0 || curTilePos.x + x > 24 || curTilePos.y + y < 0 || curTilePos.y + y > 24)
+                    continue;
+                neighbor = &map[curTilePos.x + x][curTilePos.y + y];
+                neighborTile = &coordinator.GetComponent<CTile>(*neighbor);
+                gCostTemp = gCost[current] + neighborTile->cost;
+                if (!gCost.count(*neighbor) || gCostTemp < gCost[*neighbor])
                 {
-                    temp = nextNode.fCost;
-                    iterNode = it;
-                }
-            }
-            curNode = *iterNode;
-            openList.erase(iterNode);
-        } while (!coordinator.GetComponent<CTile>(*curNode.tile).bIsWalkable);
-        
-        pos = &coordinator.GetComponent<CTile>(*curNode.tile).position;
-        checkedList[pos->x][pos->y] = true;
-
-        //Check neighbors
-        for (int xMod = -1; xMod <= 1; xMod++)
-        {
-            for (int yMod = -1; yMod <= 1; yMod++)
-            {
-                float gNew, hNew, fNew;
-                CTile newTile = coordinator.GetComponent<CTile>(map[pos->x+xMod][pos->y+yMod]);
-                if (newTile.bIsWalkable)
-                {
-                    // If dest, make path and return true
-                    if (dest == map[pos->x+xMod][pos->y+yMod])
-                    {
-                        allMap[pos->x+xMod][pos->y+xMod].prevTile = curNode.tile; 
-                        Path = MakePath(allMap, dest);
-                        return true;
-                    }
-                    // If curNode not checked yet, find costs
-                    else if (checkedList[pos->x+xMod][pos->y+yMod] == false)
-                    {
-                        gNew = curNode.gCost + 1.0f;
-                        hNew = newTile.position.DistanceTo(destTile->position);
-                        fNew = gNew + hNew;
-
-                        // If better than old cost
-                        if (allMap[pos->x+xMod][pos->y+yMod].fCost == __FLT_MAX__ ||
-                            allMap[pos->x+xMod][pos->y+yMod].fCost > fNew)
-                        {
-                            allMap[pos->x+xMod][pos->y+yMod].gCost = gNew;
-                            allMap[pos->x+xMod][pos->y+yMod].hCost = hNew;
-                            allMap[pos->x+xMod][pos->y+yMod].fCost = fNew;
-                            allMap[pos->x+xMod][pos->y+yMod].prevTile = curNode.tile;
-                            openList.emplace_back(allMap[pos->x+xMod][pos->y+yMod]);
-                        }
-                    }
+                    cameFrom[*neighbor] = current;
+                    gCost[*neighbor] = gCostTemp;
+                    fCost[*neighbor] = gCost[*neighbor] + neighborTile->position.DistanceTo(destTilePos);
+                    if (!openSet.count(*neighbor))
+                        openSet.emplace(*neighbor);
                 }
             }
         }
@@ -208,25 +173,40 @@ bool Map::FindPath(std::vector<Entity>& Path, Entity& start, Entity& dest)
     return false;
 }
 
-std::vector<Entity> Map::MakePath(std::array<std::array<Node, 25>, 25> allMap, Entity& dest)
+std::vector<Entity> Map::MakePath(const std::map<Entity, Entity>& cameFrom, const Entity& dest)
 {
-    CTile* destTile = &coordinator.GetComponent<CTile>(dest);
-    int2* pos = &destTile->position;
-    std::stack<Node> path;
-    std::vector<Entity> usablePath;
-
-    while (allMap[pos->x][pos->y].tile && coordinator.GetComponent<CTile>(*allMap[pos->x][pos->y].prevTile).position != destTile->position)
+    Entity current = dest;
+    std::vector<Entity> path{ dest };
+    while (cameFrom.count(current))
     {
-        path.push(allMap[pos->x][pos->y]);
-        pos = &coordinator.GetComponent<CTile>(*allMap[pos->x][pos->y].prevTile).position;
+        current = cameFrom.at(current);
+        path.emplace(path.begin(), current);
     }
-    path.push(allMap[pos->x][pos->y]);
-
-    while (!path.empty())
-    {
-        Node top = path.top();
-        path.pop();
-        usablePath.emplace_back(*top.tile);
-    }
-    return usablePath;
+    return path;
 }
+
+void Map::PrintNodes(const std::map<Entity, float>& gCost, const int2& current, const int2& start, const int2& dest)
+{
+    std::ostringstream oss;
+    oss << "\n";
+    for (int x = 0; x < 25; x++)
+    {
+        for (int y = 0; y < 25; y++)
+        {
+            if (int2(x, y) == start)
+                oss << "S";
+            else if (int2(x, y) == dest)
+                oss << "D";
+            else if (!gCost.count(map[x][y]))
+                oss << ",";
+            else
+                oss << (int)gCost.at(map[x][y]);
+            if (int2(x, y) == current)
+                oss << "X";
+            oss << "\t";
+        }
+        oss << "\n";
+    }
+    SDL_Log(oss.str().c_str());
+}
+
