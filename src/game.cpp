@@ -17,10 +17,12 @@ std::shared_ptr<SController> Game::sController;
 std::map<SDL_EventType, std::vector<EventCallback>> Game::registeredCallbacks;
 std::default_random_engine Game::generator;
 std::unique_ptr<Map> Game::map;
+ThreadPool Game::threadPool;
 bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
+
     camera = {float2(0, 0), 1, true};
     // ECS
     coordinator.Init();
@@ -165,8 +167,8 @@ void Game::Render(float deltaSeconds)
 void Game::Clean()
 {
     sRenderer->Clean();
+    SDL_Log("Game cleaned!");
     SDL_Quit();
-    std::cout << "Game Cleaned!" << std::endl;
 }
 
 float2 Game::ScreenToWorldSpace(const float2& position)

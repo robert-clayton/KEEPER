@@ -3,16 +3,18 @@
 #include "../game.h"
 #include "../map.h"
 #include <iostream>
+#include <vector>
 
 void SController::Update(float deltaSeconds)
 {
-    Uint32 start = SDL_GetTicks();
+    //Uint32 start = SDL_GetTicks();
     for (auto const& entity : entities)
-    {
-        DoMovement(entity, deltaSeconds);
-    }
-    Uint32 end = SDL_GetTicks();
-    SDL_Log("Time spent updating SController: %dms", end - start);
+        futures.push_back(Game::threadPool.enqueue([&] { DoMovement(entity, deltaSeconds); }));
+    for (auto& fut : futures)
+        fut.get();
+    futures.clear();
+    //Uint32 end = SDL_GetTicks();
+    //SDL_Log("%dms", start - end);
 }
 
 void SController::DoMovement(const Entity entity, float deltaSeconds)
@@ -25,26 +27,19 @@ void SController::DoMovement(const Entity entity, float deltaSeconds)
     {
         // Get new path if needed
         if (aiController.movePath.empty())
-        {
-            Entity dest = Game::map->GetRandomTile();
-            while (dest == transform.tile)
-            {
-                dest = Game::map->GetRandomTile();
-            }
-            Game::map->FindPath(aiController.movePath, transform.tile, dest);
-        }
+            if (!Game::map->FindPath(aiController.movePath, transform.tile, Game::map->GetRandomTile()))
+                return;
+        
         // Get next tile in path and start moving to it
-        if (!aiController.movePath.empty())
-        {
-            coordinator.GetComponent<CTile>(transform.tile).entities.erase(entity);
-            transform.tile = aiController.movePath.front();
-            aiController.movePath.erase(aiController.movePath.begin());
-            coordinator.GetComponent<CTile>(transform.tile).entities.emplace(entity);
-            aiController.moveDirection = transform.position.DirectionTo(
-                coordinator.GetComponent<CTransform>(transform.tile).position);
 
-            aiController.bIsMoving = true;
-        }
+        coordinator.GetComponent<CTile>(transform.tile).entities.erase(entity);
+        transform.tile = aiController.movePath.front();
+        aiController.movePath.erase(aiController.movePath.begin());
+        coordinator.GetComponent<CTile>(transform.tile).entities.emplace(entity);
+        aiController.moveDirection = transform.position.DirectionTo(
+            coordinator.GetComponent<CTransform>(transform.tile).position);
+
+        aiController.bIsMoving = true;
     }
     if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(transform.tile).position) < stats.speed * deltaSeconds)
     {

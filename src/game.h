@@ -6,6 +6,7 @@
 #include <vector>
 #include <random>
 #include "ecs/systems.h"
+#include "threadpool.h"
 
 using EventCallback = std::function<void(SDL_Event const&)>;
 
@@ -29,6 +30,7 @@ public:
     static bool bIsRunning;
     static std::unique_ptr<class Map> map;
     static Camera camera;
+    static ThreadPool threadPool;
 
     void Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
     void Update(float deltaSeconds);

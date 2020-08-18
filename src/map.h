@@ -7,21 +7,6 @@
 class float3;
 class int2;
 
-struct Node
-{
-    Entity* tile;
-    Entity* prevTile;
-    float gCost; //Exact
-    float hCost; //Heuristic
-    float fCost; //g + h -> used
-
-    Node()
-    {
-        tile = prevTile = nullptr;
-        gCost = hCost = fCost = FLT_MAX;
-    }
-};
-
 class Map
 {
 public:
