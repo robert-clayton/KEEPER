@@ -8,8 +8,9 @@ extern Coordinator coordinator;
 class SController : public System
 {
 public:
-    void Update(float deltaSeconds);
+    void Update(const float deltaSeconds);
 private:
     std::vector<std::future<void>> futures;
-    void DoMovement(const Entity entity, float deltaSeconds);
+    const void DoMovement(const std::vector<Entity>& entityVec, const float deltaSeconds);
+    void DoMovement(const Entity entity, const float deltaSeconds);
 };

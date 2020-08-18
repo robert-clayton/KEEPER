@@ -16,12 +16,6 @@ using ComponentType = std::uint_fast8_t;
 const ComponentType MAX_COMPONENTS = 32;
 using Signature = std::bitset<MAX_COMPONENTS>;
 
-struct Transform
-{
-    float2 position;
-    float2 scale;
-};
-
 class EntityManager
 {
 public:

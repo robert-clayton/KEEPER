@@ -121,7 +121,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(10);
+    std::vector<Entity> entities(2500);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
