@@ -8,7 +8,6 @@
 
 struct CTransform
 {
-    Entity tile;
     float3 position;
     float2 scale;
     int layer;
@@ -16,24 +15,17 @@ struct CTransform
 
     CTransform()
     {
-        scale.x = scale.y = 1;
-        bIsDirty = false;
-        layer = 0;
+        this->position = float3();
+        this->scale.x = scale.y = 1;
+        this->layer = 0;
+        this->bIsDirty = false;
     }
-    CTransform(float3 position_)
+    CTransform(float3 position)
     {
-        position = position_;
-        scale.x = scale.y = 1;
-        bIsDirty = true;
-        layer = 0;
-    }
-    CTransform(float3 position_, Entity tile_)
-    {
-        tile = tile_;
-        position = position_;
-        scale.x = scale.y = 1;
-        bIsDirty = true;
-        layer = 0;
+        this->position = position;
+        this->scale.x = scale.y = 1;
+        this->layer = 0;
+        this->bIsDirty = true;
     }
 };
 
@@ -110,6 +102,7 @@ struct CAIController
     bool bIsActive;
     bool bIsMoving;
     float3 moveDirection;
+    Entity tile;
     std::vector<Entity> movePath;
 
     CAIController(bool bIsActive=true)
@@ -117,5 +110,7 @@ struct CAIController
         this->bIsActive = bIsActive;
         this->bIsMoving = false;
         this->moveDirection = float3();
+        this->tile = 1;
+        this->movePath = std::vector<Entity>();
     }
 };

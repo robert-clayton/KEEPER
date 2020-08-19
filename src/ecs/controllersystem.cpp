@@ -74,26 +74,26 @@ const void SController::DoMovement(const std::vector<Entity>& entityVec, const f
         {
             // Get new path if needed
             if (aiController.movePath.empty())
-                if (!Game::map->FindPath(aiController.movePath, transform.tile, Game::map->GetRandomTile()))
+                if (!Game::map->FindPath(aiController.movePath, aiController.tile, Game::map->GetRandomTile()))
                     return;
 
             // Get next tile in path and start moving to it
             mtx.lock();
-            coordinator.GetComponent<CTile>(transform.tile).entities.erase(entity);
-            transform.tile = aiController.movePath.front();
+            coordinator.GetComponent<CTile>(aiController.tile).entities.erase(entity);
+            aiController.tile = aiController.movePath.front();
             aiController.movePath.erase(aiController.movePath.begin());
-            coordinator.GetComponent<CTile>(transform.tile).entities.emplace(entity);
+            coordinator.GetComponent<CTile>(aiController.tile).entities.emplace(entity);
             mtx.unlock();
             aiController.moveDirection = transform.position.DirectionTo(
-                coordinator.GetComponent<CTransform>(transform.tile).position);
+                coordinator.GetComponent<CTransform>(aiController.tile).position);
 
             aiController.bIsMoving = true;
         }
-        if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(transform.tile).position) < stats.speed * deltaSeconds)
+        if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(aiController.tile).position) < stats.speed * deltaSeconds)
         {
             aiController.bIsMoving = false;
             aiController.moveDirection.Zero();
-            transform.position = coordinator.GetComponent<CTransform>(transform.tile).position;
+            transform.position = coordinator.GetComponent<CTransform>(aiController.tile).position;
         }
         else
         {
@@ -113,26 +113,26 @@ void SController::DoMovement(const Entity entity, const float deltaSeconds)
     {
         // Get new path if needed
         if (aiController.movePath.empty())
-            if (!Game::map->FindPath(aiController.movePath, transform.tile, Game::map->GetRandomTile()))
+            if (!Game::map->FindPath(aiController.movePath, aiController.tile, Game::map->GetRandomTile()))
                 return;
 
         // Get next tile in path and start moving to it
         mtx.lock();
-        coordinator.GetComponent<CTile>(transform.tile).entities.erase(entity);
-        transform.tile = aiController.movePath.front();
+        coordinator.GetComponent<CTile>(aiController.tile).entities.erase(entity);
+        aiController.tile = aiController.movePath.front();
         aiController.movePath.erase(aiController.movePath.begin());
-        coordinator.GetComponent<CTile>(transform.tile).entities.emplace(entity);
+        coordinator.GetComponent<CTile>(aiController.tile).entities.emplace(entity);
         mtx.unlock();
         aiController.moveDirection = transform.position.DirectionTo(
-            coordinator.GetComponent<CTransform>(transform.tile).position);
+            coordinator.GetComponent<CTransform>(aiController.tile).position);
 
         aiController.bIsMoving = true;
     }
-    if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(transform.tile).position) < stats.speed * deltaSeconds)
+    if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(aiController.tile).position) < stats.speed * deltaSeconds)
     {
         aiController.bIsMoving = false;
         aiController.moveDirection.Zero();
-        transform.position = coordinator.GetComponent<CTransform>(transform.tile).position;
+        transform.position = coordinator.GetComponent<CTransform>(aiController.tile).position;
     }
     else
     {

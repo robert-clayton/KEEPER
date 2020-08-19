@@ -121,18 +121,18 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(2500);
+    std::vector<Entity> entities(20);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
         coordinator.AddComponent(entity, CAIController());
         coordinator.AddComponent(entity, CStats());
         Entity tile = map->GetRandomTile();
-        coordinator.AddComponent(
-                    entity,
-                    CTransform(
-                        coordinator.GetComponent<CTransform>(tile).position,
-                        tile));
+        while (!coordinator.GetComponent<CTile>(tile).bIsWalkable)
+        {
+            tile = map->GetRandomTile();
+        }
+        coordinator.AddComponent(entity, CTransform(coordinator.GetComponent<CTransform>(tile).position));
         coordinator.AddComponent(entity, CSprite{sRenderer->LoadTexture("deer_sheet.png"), 
                                 SDL_Rect{0, 0, 8, 8}, SDL_Rect{0, 0, 40, 40}, float2(0,0), 1});
         coordinator.GetComponent<CTile>(tile).entities.emplace(entity);
@@ -169,6 +169,11 @@ void Game::Clean()
     sRenderer->Clean();
     SDL_Log("Game cleaned!");
     SDL_Quit();
+}
+
+float Game::GetRandomScalar(float max)
+{
+    return static_cast<float>(rand()) / static_cast<float> (RAND_MAX / max);
 }
 
 float2 Game::ScreenToWorldSpace(const float2& position)

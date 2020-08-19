@@ -64,8 +64,11 @@ void Map::LoadMap(int arr[25][25])
         {
             tile = coordinator.CreateEntity();
             map[row][col] = tile;
-            coordinator.AddComponent(tile, CTile(int2(row, col)));
-            coordinator.AddComponent(tile, CTransform(TileToWorldSpace(row, col), tile));
+            coordinator.AddComponent(tile, CTile(int2(row, col), true, 1 + 2 * (bool)arr[row][col]));
+            coordinator.AddComponent(tile, CTransform(
+                TileToWorldSpace(row, col) 
+                - float3(0.0f,0.0f,arr[row][col] * 15.0f * Game::GetRandomScalar())
+            ));
             coordinator.AddComponent(tile, CSprite{textures.at(arr[row][col]), srcRect, destRect, float2(0.0f,40.0f), 0});
         }
     }
@@ -158,6 +161,8 @@ bool Map::FindPath(std::vector<Entity>& Path, const Entity& start, const Entity&
                     continue;
                 neighbor = &map[curTilePos.x + x][curTilePos.y + y];
                 neighborTile = &coordinator.GetComponent<CTile>(*neighbor);
+                if (!neighborTile->bIsWalkable)
+                    continue;
                 gCostTemp = gCost[current] + neighborTile->cost;
                 if (!gCost.count(*neighbor) || gCostTemp < gCost[*neighbor])
                 {
