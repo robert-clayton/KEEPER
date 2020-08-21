@@ -76,7 +76,7 @@ struct CCreature
 struct CSprite
 {
 
-    std::unordered_map<int, SDL_Rect> sprites;
+    std::map<int, SDL_Rect> sprites;
     int activeSpriteKey;
     SDL_Texture* sheet;
     SDL_Rect dest;
@@ -86,7 +86,7 @@ struct CSprite
 
     CSprite()
     {
-        this->sprites = std::unordered_map<int, SDL_Rect>();
+        this->sprites = std::map<int, SDL_Rect>();
         this->activeSpriteKey = 0;
         this->sheet = nullptr;
         this->dest = {};
@@ -97,7 +97,7 @@ struct CSprite
 
     CSprite(SDL_Texture* sheet, SDL_Rect size, SDL_Rect dest, int2 renderOffset = int2(), int renderLayer = 0)
     {
-        this->sprites = std::unordered_map<int, SDL_Rect>();
+        this->sprites = std::map<int, SDL_Rect>();
         this->activeSpriteKey = 1;
         this->sheet = sheet;
         this->dest = dest;

@@ -21,7 +21,7 @@ public:
     ~ThreadPool();
 private:
     std::vector< std::thread > workers;
-    std::queue< std::function<void()> > tasks;
+    std::queue< std::function<void()>> tasks;
 
     // synchronization
     std::mutex queue_mutex;

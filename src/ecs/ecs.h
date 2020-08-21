@@ -6,6 +6,8 @@
 #include <set>
 #include <memory>
 #include <array>
+#include <future>
+#include <mutex>
 #include <unordered_map>
 #include <SDL.h>
 #include "../math/float2.h"
@@ -185,8 +187,6 @@ public:
         }
     }
 
-
-
 private:
     std::unordered_map<const char*, ComponentType> componentTypes;
     std::unordered_map<const char*, std::shared_ptr<IComponentArray>> componentArrays;
@@ -207,6 +207,9 @@ class System
 {
 public:
     std::set<Entity> entities;
+protected:
+    std::vector<std::future<void>> futures;
+    std::mutex mtx;
 };
 
 class SystemManager

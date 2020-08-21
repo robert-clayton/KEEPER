@@ -2,56 +2,12 @@
 #include "components.h"
 #include "../game.h"
 #include "../map.h"
-#include <iostream>
 #include <vector>
-#include <mutex>
 
-std::mutex mtx;
-
-template<typename T>
-std::vector<std::vector<T>> ChunkVectorToSize(const std::vector<T>& source, size_t chunkSize)
-{
-    std::vector<std::vector<T>> result;
-    result.reserve((source.size() + chunkSize - 1) / chunkSize);
-
-    auto start = source.begin();
-    auto end = source.end();
-
-    while (start != end) {
-        auto next = std::distance(start, end) >= chunkSize
-            ? start + chunkSize
-            : end;
-
-        result.emplace_back(start, next);
-        start = next;
-    }
-
-    return result;
-}
-
-template<typename T>
-std::vector<std::vector<T>> SplitVectorToNChunks(const std::vector<T>& vec, size_t n)
-{
-    std::vector<std::vector<T>> outVec;
-
-    size_t length = vec.size() / n;
-    size_t remain = vec.size() % n;
-
-    size_t begin = 0;
-    size_t end = 0;
-
-    for (size_t i = 0; i < std::min(n, vec.size()); ++i)
-    {
-        end += (remain > 0) ? (length + !!(remain--)) : length;
-        outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
-        begin = end;
-    }
-    return outVec;
-}
 
 void SController::Update(const float deltaSeconds)
 {
-    const auto& chunkedEntities = SplitVectorToNChunks(
+    const auto& chunkedEntities = Game::SplitVectorToNChunks(
         std::vector<Entity>{entities.begin(), entities.end()}, 
         std::thread::hardware_concurrency()
     );
@@ -78,6 +34,7 @@ const void SController::DoMovement(const std::vector<Entity>& entityVec, const f
                     return;
 
             // Get next tile in path and start moving to it
+            aiController.direction = GetDirectionValue(aiController.tile, aiController.movePath.front());
             mtx.lock();
             coordinator.GetComponent<CTile>(aiController.tile).entities.erase(entity);
             aiController.tile = aiController.movePath.front();
@@ -103,40 +60,28 @@ const void SController::DoMovement(const std::vector<Entity>& entityVec, const f
     }
 }
 
-void SController::DoMovement(const Entity entity, const float deltaSeconds)
+const int SController::GetDirectionValue(Entity src, Entity dest)
 {
-    auto& transform = coordinator.GetComponent<CTransform>(entity);
-    auto& aiController = coordinator.GetComponent<CAIController>(entity);
-    auto& stats = coordinator.GetComponent<CStats>(entity);
+    int2 srcPos = coordinator.GetComponent<CTile>(src).position;
+    int2 destPos = coordinator.GetComponent<CTile>(dest).position;
 
-    if (!aiController.bIsMoving)
-    {
-        // Get new path if needed
-        if (aiController.movePath.empty())
-            if (!Game::map->FindPath(aiController.movePath, aiController.tile, Game::map->GetRandomTile()))
-                return;
-
-        // Get next tile in path and start moving to it
-        mtx.lock();
-        coordinator.GetComponent<CTile>(aiController.tile).entities.erase(entity);
-        aiController.tile = aiController.movePath.front();
-        aiController.movePath.erase(aiController.movePath.begin());
-        coordinator.GetComponent<CTile>(aiController.tile).entities.emplace(entity);
-        mtx.unlock();
-        aiController.moveDirection = transform.position.DirectionTo(
-            coordinator.GetComponent<CTransform>(aiController.tile).position);
-
-        aiController.bIsMoving = true;
-    }
-    if (transform.position.DistanceTo(coordinator.GetComponent<CTransform>(aiController.tile).position) < stats.speed * deltaSeconds)
-    {
-        aiController.bIsMoving = false;
-        aiController.moveDirection.Zero();
-        transform.position = coordinator.GetComponent<CTransform>(aiController.tile).position;
-    }
-    else
-    {
-        transform.position += aiController.moveDirection * stats.speed * deltaSeconds;
-        transform.bIsDirty = true;
-    }
+    if (srcPos.x == destPos.x && srcPos.y < destPos.y) // Visual down right
+        return 7;
+    if (srcPos.x == destPos.x && srcPos.y > destPos.y) // Visual up right
+        return 3;
+    
+    if (srcPos.x > destPos.x && srcPos.y > destPos.y) // Visual up
+        return 4;
+    if (srcPos.x > destPos.x && srcPos.y == destPos.y) // Visual up left
+        return 5;
+    if (srcPos.x > destPos.x && srcPos.y < destPos.y) // Visual right
+        return 6;
+    if (srcPos.x < destPos.x && srcPos.y > destPos.y) // Visual left
+        return 2;
+    if (srcPos.x < destPos.x && srcPos.y == destPos.y) // Visual down left
+        return 1;
+    if (srcPos.x < destPos.x && srcPos.y < destPos.y) // Visual down
+        return 0;
+    
+    return 1;
 }

@@ -10,7 +10,7 @@
 extern Coordinator coordinator;
 
 int lvl1[25][25] = {
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -24,17 +24,17 @@ int lvl1[25][25] = {
     {0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+//    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 Map::Map()
@@ -48,9 +48,7 @@ Map::Map()
 Map::~Map()
 {
     for (SDL_Texture* texture : textures)
-    {
         SDL_DestroyTexture(texture);
-    }
 }
 
 void Map::LoadMap(int arr[25][25])
@@ -58,7 +56,8 @@ void Map::LoadMap(int arr[25][25])
     Entity tile;
     SDL_Rect srcRect = SDL_Rect{50, 50, 500, 500};
     SDL_Rect destRect = SDL_Rect{0, 0, 80, 80};
-    for (int row = 0; row < 25; row++)
+    int2 renderOffset = int2(0, 60);
+    for (int row = 0; row < 14; row++)
     {
         for (int col = 0; col < 25; col++)
         {
@@ -71,7 +70,7 @@ void Map::LoadMap(int arr[25][25])
             ));
             coordinator.AddComponent(tile, CSprite(
                 textures.at(arr[row][col]),
-                srcRect, destRect, int2(0, 60), 0
+                srcRect, destRect, renderOffset, 0
             ));
         }
     }
@@ -79,14 +78,14 @@ void Map::LoadMap(int arr[25][25])
 
 Entity Map::GetRandomTile()
 {
-    std::uniform_int_distribution<int> randX(0, 24);
+    std::uniform_int_distribution<int> randX(0, 13);
     std::uniform_int_distribution<int> randY(0, 24);
     return map[randX(Game::generator)][randY(Game::generator)];
 }
 
 float3 Map::GetRandomTilePos()
 {
-    std::uniform_int_distribution<int> randX(0, 24);
+    std::uniform_int_distribution<int> randX(0, 13);
     std::uniform_int_distribution<int> randY(0, 24);
     float3 pos = coordinator.GetComponent<CTransform>(map[randX(Game::generator)][randY(Game::generator)]).position;
     return float3(pos.x, pos.y, 0);
@@ -94,7 +93,7 @@ float3 Map::GetRandomTilePos()
 
 float3 Map::TileToWorldSpace(const int& x, const int& y)
 {
-    return float3((x - y) * 40.0f, (y + x) * 20.0f, 0.0f);
+    return float3((y - x) * 40.0f, (y + x) * 20.0f, 0.0f);
 }
 
 float3 Map::TileToWorldSpace(const int2& position)
@@ -104,16 +103,18 @@ float3 Map::TileToWorldSpace(const int2& position)
 
 int2 Map::WorldToTileSpace(const float3& position)
 {
+    //TODO: Make this not as dirty
+    float3 newPos = position + float2(0,20.0f);
     return int2(
-        (int)((position.x / 40 + position.y / 20) / 2),
-        (int)(position.y / 20 - (position.x / 40 + position.y / 20) / 2)
+        (int)((newPos.y / 20 - newPos.x / 40) / 2),
+        (int)(newPos.y / 20 - (newPos.y / 20 - newPos.x / 40) / 2)
         );
 }
 
 bool Map::TileAt(Entity& tile, const float3& position)
 {
     int2 location = WorldToTileSpace(position);
-    if (location.x >= 0 && location.x < 25 && location.y >= 0 && location.y < 25)
+    if (location.x >= 0 && location.x < 14 && location.y >= 0 && location.y < 25)
     {
         tile = map[location.x][location.y];
         return true;
@@ -123,7 +124,7 @@ bool Map::TileAt(Entity& tile, const float3& position)
 
 bool Map::TileAt(Entity& tile, const int2& position)
 {
-    if (position.x >= 0 && position.x < 25 && position.y >= 0 && position.y < 25)
+    if (position.x >= 0 && position.x < 14 && position.y >= 0 && position.y < 25)
     {
         tile = map[position.x][position.y];
         return true;
@@ -160,7 +161,7 @@ bool Map::FindPath(std::vector<Entity>& Path, const Entity& start, const Entity&
         {
             for (int y = -1; y <= 1; y++)
             {
-                if (curTilePos.x + x < 0 || curTilePos.x + x > 24 || curTilePos.y + y < 0 || curTilePos.y + y > 24)
+                if (curTilePos.x + x < 0 || curTilePos.x + x > 13 || curTilePos.y + y < 0 || curTilePos.y + y > 24)
                     continue;
                 neighbor = &map[curTilePos.x + x][curTilePos.y + y];
                 neighborTile = &coordinator.GetComponent<CTile>(*neighbor);
@@ -197,7 +198,7 @@ void Map::PrintNodes(const std::map<Entity, float>& gCost, const int2& current, 
 {
     std::ostringstream oss;
     oss << "\n";
-    for (int x = 0; x < 25; x++)
+    for (int x = 0; x < 14; x++)
     {
         for (int y = 0; y < 25; y++)
         {

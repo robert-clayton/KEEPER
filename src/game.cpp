@@ -4,7 +4,7 @@
 #include "ecs/systems.h"
 #include "ecs/ecs.h"
 #include "math/float2.h"
-#include "math/float3.h"
+#include <vector>
 #include <random>
 #include "map.h"
 
@@ -14,6 +14,7 @@ Coordinator coordinator;
 Camera Game::camera;
 std::shared_ptr<SRenderer> Game::sRenderer;
 std::shared_ptr<SController> Game::sController;
+std::shared_ptr<SAnimation> Game::sAnimation;
 std::map<SDL_EventType, std::vector<EventCallback>> Game::registeredCallbacks;
 std::default_random_engine Game::generator;
 std::unique_ptr<Map> Game::map;
@@ -32,6 +33,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     coordinator.RegisterComponent<CAIController>();
     coordinator.RegisterComponent<CTile>();
     sController = coordinator.RegisterSystem<SController>();
+    sAnimation = coordinator.RegisterSystem<SAnimation>();
     sRenderer = coordinator.RegisterSystem<SRenderer>();
 
     // SDL
@@ -52,6 +54,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         (void)event;
         this->bIsMouseButtonDown = true;
     });
+    
     RegisterEvent(SDL_MOUSEBUTTONUP, [this](SDL_Event const& event){
         if (!this->bIsDragging)
         {
@@ -59,12 +62,13 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
             bool bTileExists = map->TileAt(tile, ScreenToWorldSpace(float2((float)event.motion.x, (float)event.motion.y)));
             if (bTileExists)
             {
-                coordinator.GetComponent<CSprite>(tile).texture = map->textures.at(1);
+                coordinator.GetComponent<CSprite>(tile).sheet = map->textures.at(1);
             }
         }
         this->bIsMouseButtonDown = false;
         this->bIsDragging = false;
     });
+    
     RegisterEvent(SDL_MOUSEMOTION, [this](SDL_Event const& event){
         camera.position += float2((float)-event.motion.xrel, (float)-event.motion.yrel) / camera.zoom * bIsMouseButtonDown;
         camera.bIsDirty = (camera.bIsDirty && !bIsMouseButtonDown) || bIsMouseButtonDown;
@@ -115,13 +119,18 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     coordinator.SetSystemSignature<SController>(signature);
 
     signature.reset();
+    signature.set(coordinator.GetComponentType<CSprite>());
+    signature.set(coordinator.GetComponentType<CAIController>());
+    coordinator.SetSystemSignature<SAnimation>(signature);
+
+    signature.reset();
     signature.set(coordinator.GetComponentType<CTransform>());
     signature.set(coordinator.GetComponentType<CSprite>());
     coordinator.SetSystemSignature<SRenderer>(signature);
 
     map = coordinator.make_unique<Map>();
 
-    std::vector<Entity> entities(2000);
+    std::vector<Entity> entities(10);
     for (auto& entity : entities)
     {
         entity = coordinator.CreateEntity();
@@ -130,12 +139,6 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
         while (!coordinator.GetComponent<CTile>(tile).bIsWalkable)
             tile = map->GetRandomTile();
         coordinator.AddComponent(entity, CTransform(coordinator.GetComponent<CTransform>(tile).position));
-        //coordinator.AddComponent(entity, CSprite(
-        //    sRenderer->LoadTexture("deer_sheet.png"), 
-        //    SDL_Rect{0, 0, 8, 8},
-        //    SDL_Rect{0, 0, 40, 40},
-        //    int2(), 1
-        //));
         coordinator.AddComponent(entity, CSprite(
             sRenderer->LoadTexture("char.png"),
             SDL_Rect{ 0, 0, 100, 300 },
@@ -165,6 +168,7 @@ void Game::HandleEvents()
 void Game::Update(float deltaSeconds)
 {
     sController->Update(deltaSeconds);
+    sAnimation->Update(deltaSeconds);
 }
 
 void Game::Render(float deltaSeconds)
