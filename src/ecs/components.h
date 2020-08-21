@@ -75,8 +75,26 @@ struct CSprite
     SDL_Texture* texture;
     SDL_Rect src;
     SDL_Rect dest;
-    float2 renderOffset;
+    int2 renderOffset;
     int renderLayer;
+
+    CSprite()
+    {
+        this->texture = nullptr;
+        this->src = {};
+        this->dest = {};
+        this->renderOffset = int2();
+        this->renderLayer = 0;
+    }
+
+    CSprite(SDL_Texture* texture, SDL_Rect src, SDL_Rect dest, int2 renderOffset = int2(), int renderLayer = 0)
+    {
+        this->texture = texture;
+        this->src = src;
+        this->dest = dest;
+        this->renderOffset = renderOffset - int2(dest.w / 2, dest.h);
+        this->renderLayer = renderLayer;
+    }
 };
 
 struct CStats
@@ -111,6 +129,15 @@ struct CAIController
         this->bIsMoving = false;
         this->moveDirection = float3();
         this->tile = 1;
+        this->movePath = std::vector<Entity>();
+    }
+
+    CAIController(Entity tile)
+    {
+        this->bIsActive = true;
+        this->bIsMoving = false;
+        this->moveDirection = float3();
+        this->tile = tile;
         this->movePath = std::vector<Entity>();
     }
 };

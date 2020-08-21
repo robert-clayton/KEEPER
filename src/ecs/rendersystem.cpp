@@ -20,12 +20,10 @@ void SRenderer::Update(float deltaSeconds)
         {
             sprite.dest.x = transform.position.x
                     + sprite.renderOffset.x
-                    - sprite.dest.w / 2
                     - Game::camera.position.x;
             sprite.dest.y = transform.position.y
                     + sprite.renderOffset.y
                     + transform.position.z
-                    - sprite.dest.h / 2
                     - Game::camera.position.y;
             transform.bIsDirty = false;
         }
@@ -54,8 +52,12 @@ SDL_Texture* SRenderer::LoadTexture(const char *fileName)
 {
     std::string assetPath = "E:/Repos/KEEPER/assets/";
     assetPath += fileName;
+    if (textures.count(assetPath))
+        return textures[assetPath];
+    
     SDL_Surface* tempSurface = IMG_Load(assetPath.c_str());
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+    textures[assetPath] = texture;
     SDL_FreeSurface(tempSurface);
 
     assert(texture && "Texture unable to be loaded!");
