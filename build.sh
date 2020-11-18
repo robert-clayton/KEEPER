@@ -1,4 +1,5 @@
 #!/bin/bash
+
 $SCRIPTROOT="$(dirname $0)"
 $OUTPUTPATH="$SCRIPTROOT/dist/"
 $OUTPUTNAME="KEEPER"
