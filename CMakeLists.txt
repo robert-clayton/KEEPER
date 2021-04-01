@@ -4,7 +4,7 @@ project(KEEPER)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
 
 set(THIRD_PARTY_DIR "../../Development")
-set(MAIN_SOURCE_DIR "./src")
+set(MAIN_SOURCE_DIR "src")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/out)
 
 include_directories(${THIRD_PARTY_DIR}/SDL2/include)
@@ -25,5 +25,5 @@ set_target_properties(
     KEEPER
     PROPERTIES
     LINK_FLAGS
-    "-O2 -s USE_SDL=2 -s USE_WEBGL2=1"
+    "-O2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s USE_WEBGL2=1 -s ASSERTIONS=1"
 )

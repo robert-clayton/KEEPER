@@ -23,7 +23,7 @@ dist
 /assets/*.kra
 
 build
-old
+out
 
 # Qt-es
 object_script.*.Release

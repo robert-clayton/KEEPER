@@ -1,9 +1,6 @@
-#pragma comment(lib, "Ws2_32.lib")
-
 #include "rendersystem.h"
 #include "../game.h"
 #include <fstream>
-#include <winsock.h>
 
 extern Coordinator coordinator;
 
@@ -115,8 +112,8 @@ int SRenderer::GetTextureCount(const char* fileName, int tileWidth)
     file.seekg(16);
     file.read((char*)&width, 4);
     file.read((char*)&height, 4);
-    width = ntohl(width);
-    height = ntohl(height);
+    // width = ntohl(width);
+    // height = ntohl(height);
     SDL_Log("%d %d -> %d sprites on sheet at %s", width, height, width / tileWidth, fullPath.c_str());
     return width / tileWidth;
 }

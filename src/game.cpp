@@ -37,13 +37,9 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     sRenderer = coordinator.RegisterSystem<SRenderer>();
 
     // SDL
-    if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
-        sRenderer->CreateWindowRenderer(title, xPos, yPos, width, height, fullscreen);
-        bIsRunning = true;
-    }
-    else
-        bIsRunning = false;
+    
+    sRenderer->CreateWindowRenderer(title, xPos, yPos, width, height, fullscreen);
+    bIsRunning = true;
 
     // Event registration
     RegisterEvent(SDL_QUIT, [](SDL_Event const& event){
