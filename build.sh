@@ -13,7 +13,7 @@ fi
 # In order to find the Emscripten build tools, we need to configure some environment variables so they are available during the build. The required environment variables are initialized by sourcing the 'emsdk_env.sh' that ships with the Emscripten SDK.
 pushd .emsdk
     echo "Configuring Emscripten environment variables"
-    . ./emsdk_env.sh
+    source ./emsdk_env.sh
 popd
 
 # Hop into the 'build' folder to start our CMake build.
