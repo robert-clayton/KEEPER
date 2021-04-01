@@ -22,6 +22,9 @@ dist
 # Krita files
 /assets/*.kra
 
+build
+old
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
