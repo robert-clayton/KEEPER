@@ -19,6 +19,9 @@
 
 # HISTORY
 
+### v0.0.5 - A* Tile Costs
+![2500 entities avoiding sand like the plague](./docs/res/0.0.5.gif)
+
 ### v0.0.4 - ECS Concurrency Implemented
 ![2500 entities spamming a* and smooth as butter](./docs/res/0.0.4.gif)
 
