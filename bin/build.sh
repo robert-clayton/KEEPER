@@ -18,7 +18,6 @@ popd
 
 # Hop into the 'build' folder to start our CMake build.
 pushd build
-	
     # Because we sourced the Emscripten environment variables, we can use the 'EMSCRIPTEN' var to know where the current SDK can be found, which we need so we can locate the 'Emscripten.cmake' toolchain file.
     EMSCRIPTEN_CMAKE_PATH=${EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 

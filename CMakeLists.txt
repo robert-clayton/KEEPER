@@ -3,7 +3,7 @@ project(KEEPER)
 # We are using C++ 17 and will make use of C++ exceptions.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
 
-set(THIRD_PARTY_DIR "../../Development")
+set(THIRD_PARTY_DIR "thirdparty")
 set(MAIN_SOURCE_DIR "src")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/out)
 
@@ -25,5 +25,5 @@ set_target_properties(
     KEEPER
     PROPERTIES
     LINK_FLAGS
-    "-O2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s USE_WEBGL2=1 -s ASSERTIONS=1"
+    "-O2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s USE_WEBGL2=1 -s ASSERTIONS=1 -sSINGLE_FILE"
 )
