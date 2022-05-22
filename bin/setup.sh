@@ -1,3 +1,7 @@
-./thirdparty/emsdk update
-./thirdparty/emsdk install latest
-./thirdparty/emsdk activate latest
+#!/bin/bash
+
+pushd thirdparty/emsdk
+    git pull
+    ./emsdk install latest
+    ./emsdk activate latest
+popd
