@@ -3,12 +3,9 @@ project(KEEPER)
 # We are using C++ 17 and will make use of C++ exceptions.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
 
-set(THIRD_PARTY_DIR "thirdparty")
 set(MAIN_SOURCE_DIR "src")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/out)
 
-include_directories(${THIRD_PARTY_DIR}/SDL2/include)
-include_directories(${THIRD_PARTY_DIR}/SDL2_image/include)
 
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.h)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)

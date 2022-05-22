@@ -181,7 +181,7 @@ void Game::Clean()
 
 float Game::GetRandomScalar(float max)
 {
-    return static_cast<float>(rand()) / static_cast<float> (RAND_MAX / max);
+    return static_cast<float>(rand()) / (static_cast<float> (RAND_MAX) / max);
 }
 
 float2 Game::ScreenToWorldSpace(const float2& position)

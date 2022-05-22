@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <emscripten.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 Game *game = nullptr;
 float deltaSeconds = 0.0f;
@@ -39,5 +39,6 @@ int main(int argv, char** args)
     }
     else
         std::cout << "Failed to initialize SDL!" << std::endl;
+
     return 0;
 }

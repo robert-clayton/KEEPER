@@ -12,7 +12,7 @@ private:
     SDL_Renderer* renderer;
     std::map<std::string, SDL_Texture*> textures;
     std::map<int, std::map<int, std::set<CSprite*>>> renderLayers;
-    std::string assetPath = "E:/Repos/KEEPER/res/";
+    std::string assetPath = "res/";
 
 public:
     void Update(const float deltaSeconds);

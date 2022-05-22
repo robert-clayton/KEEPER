@@ -1,6 +1,7 @@
 #include "rendersystem.h"
 #include "../game.h"
 #include <fstream>
+#include <SDL_render.h>
 
 extern Coordinator coordinator;
 

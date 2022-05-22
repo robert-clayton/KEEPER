@@ -216,6 +216,6 @@ void Map::PrintNodes(const std::map<Entity, float>& gCost, const int2& current, 
         }
         oss << "\n";
     }
-    SDL_Log(oss.str().c_str());
+    SDL_Log("%s", oss.str().c_str());
 }
 

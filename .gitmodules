@@ -1,0 +1,9 @@
+[submodule "thirdparty/emsdk"]
+	path = thirdparty/emsdk
+	url = https://github.com/emscripten-core/emsdk.git
+[submodule "thirdparty/SDL2"]
+	path = thirdparty/SDL2
+	url = https://github.com/davidsiaw/SDL2.git
+[submodule "thirdparty/SDL2_image"]
+	path = thirdparty/SDL2_image
+	url = https://github.com/davidsiaw/SDL2_image.git
