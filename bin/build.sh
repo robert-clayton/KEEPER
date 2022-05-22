@@ -14,11 +14,10 @@ mkdir -p $DIST_DIR
 cp -r $ASSETS_DIR $BUILD_DIR/res
 cp -r $SRC_DIR $BUILD_DIR/src
 
-# In order to find the Emscripten build tools, we need to configure some environment variables so they are available during the build. The required environment variables are initialized by sourcing the 'emsdk_env.sh' that ships with the Emscripten SDK.
-pushd thirdparty/emsdk
-    echo "Configuring Emscripten environment variables"
-    source ./emsdk_env.sh
-popd
+# pushd thirdparty/emsdk
+#     echo "Configuring Emscripten environment variables"
+#     source ./emsdk_env.sh
+# popd
 
 pushd $BUILD_DIR
     OBJ_FILES=""
@@ -37,5 +36,3 @@ popd
 
 cp res/favicon.ico $DIST_DIR/favicon.ico
 cp template.html $DIST_DIR/index.html
-
-emrun $DIST_DIR/index.html
