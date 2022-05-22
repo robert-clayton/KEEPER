@@ -17,11 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: mymindstorm/setup-emsdk@v11
-        with:
-          version: 3.1.10
-          actions-cache-folder: emsdk-cache
-
       - name: EMCC Build
         run: ./bin/build.sh
 
