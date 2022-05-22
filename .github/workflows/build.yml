@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted-windows
-     env:
+    env:
       s3-bucket: 'keeper.ziru.link'
     steps:
       - uses: actions/checkout@v2
