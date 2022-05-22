@@ -12,10 +12,11 @@ void SController::Update(const float deltaSeconds)
         std::thread::hardware_concurrency()
     );
     for (const auto& entityVec : chunkedEntities)
-        futures.push_back(Game::threadPool.enqueue([&] { DoMovement(entityVec, deltaSeconds); }));
-    for (auto& fut : futures)
-        fut.get();
-    futures.clear();
+        DoMovement(entityVec, deltaSeconds);
+    //     futures.push_back(Game::threadPool.enqueue([&] { DoMovement(entityVec, deltaSeconds); }));
+    // for (auto& fut : futures)
+    //     fut.get();
+    // futures.clear();    
 }
 
 const void SController::DoMovement(const std::vector<Entity>& entityVec, const float deltaSeconds)

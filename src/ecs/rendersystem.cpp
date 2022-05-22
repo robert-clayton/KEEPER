@@ -17,10 +17,11 @@ void SRenderer::Update(const float deltaSeconds)
         std::thread::hardware_concurrency()
     );
     for (const auto& entityVec : chunkedEntities)
-        futures.push_back(Game::threadPool.enqueue([&] { UpdateSpritePositions(entityVec); }));
-    for (auto& fut : futures)
-        fut.get();
-    futures.clear();
+        UpdateSpritePositions(entityVec);
+    //     futures.push_back(Game::threadPool.enqueue([&] { UpdateSpritePositions(entityVec); }));
+    // for (auto& fut : futures)
+    //     fut.get();
+    // futures.clear();
 
     for (const auto& layer : renderLayers)
         for (const auto& sublayer : layer.second)

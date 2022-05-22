@@ -5,8 +5,9 @@
 #include <functional>
 #include <vector>
 #include <random>
+#include "math/float2.h"
 #include "ecs/systems.h"
-#include "threadpool.h"
+// #include "threadpool.h"
 
 using EventCallback = std::function<void(SDL_Event const&)>;
 
@@ -31,7 +32,7 @@ public:
     static bool bIsRunning;
     static std::unique_ptr<class Map> map;
     static Camera camera;
-    static ThreadPool threadPool;
+    // static ThreadPool threadPool;
 
     void Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
     void Update(float deltaSeconds);

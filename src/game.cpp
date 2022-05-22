@@ -18,7 +18,7 @@ std::shared_ptr<SAnimation> Game::sAnimation;
 std::map<SDL_EventType, std::vector<EventCallback>> Game::registeredCallbacks;
 std::default_random_engine Game::generator;
 std::unique_ptr<Map> Game::map;
-ThreadPool Game::threadPool;
+// ThreadPool Game::threadPool;
 bool Game::bIsRunning = false;
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
@@ -37,7 +37,6 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
     sRenderer = coordinator.RegisterSystem<SRenderer>();
 
     // SDL
-    
     sRenderer->CreateWindowRenderer(title, xPos, yPos, width, height, fullscreen);
     bIsRunning = true;
 

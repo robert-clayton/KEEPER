@@ -32,7 +32,7 @@ private:
 inline ThreadPool::ThreadPool()
 {
     stop = false;
-    for (size_t i = 0; i < std::thread::hardware_concurrency(); ++i)
+    for (size_t i = 0; i < 1; ++i)
         workers.emplace_back(
             [&]
             {
