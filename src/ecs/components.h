@@ -130,7 +130,7 @@ struct CStats
         this->mana = 0;
         this->ki = 0;
         this->stamina = 5;
-        this->speed = 150;
+        this->speed = 1500;
     }
 };
 
