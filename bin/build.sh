@@ -23,26 +23,23 @@ popd
 pushd $BUILD_DIR
     OBJ_FILES=""
     for FILE in $(find src -type f -name "*.cpp"); do
-        OBJ_FILE=$OBJ_DIR/$(dirname $FILE)/$(basename $FILE .cpp).o
-        mkdir -p $(dirname $OBJ_FILE)
-        emcc -O2 $FILE -c -o $OBJ_FILE -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]'
+        # OBJ_FILE=$OBJ_DIR/$(dirname $FILE)/$(basename $FILE .cpp).o
+        # mkdir -p $(dirname $OBJ_FILE)
+        # emcc -O2 $FILE -c -o $OBJ_FILE -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]'
         OBJ_FILES+="../$FILE "
     done
 
-
-    # # Start the actual build
-    # echo "Building project ..."
-    # # make || exit 1
     emcc -s WASM=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' \
-        $OBJ_FILES -o $DIST_DIR/KEEPER.html --preload-file res || exit 1
+        $OBJ_FILES -o $DIST_DIR/KEEPER.js --preload-file res || exit 1
 popd
 
 # # Copy template to out folder
 # cp template.html out/index.html
 
 cp res/favicon.ico $DIST_DIR/favicon.ico
+cp template.html $DIST_DIR/index.html
 
-emrun $DIST_DIR/KEEPER.html
+emrun $DIST_DIR/index.html
 
 
 # CC = emcc
