@@ -6,8 +6,8 @@
 - The secondary goal of KEEPER is to produce something of a combination between Wakfu and a world simulation
 - Isometric because isometric wins
 - Making my own engine for the sake of learning what it requires me to do
-    - Data Oriented Entity Component System (Multithreading WIP)
-- Built on top of the SDL2 framework with---currently---no other dependencies
+    - Data Oriented Entity Component System
+- Built on top of the SDL2 framework via the Emscripten SDK
 
 # TODO
 - [x] Worker threads that await jobs in the ECS
@@ -17,8 +17,10 @@
 - [ ] Boid alg and some sort of CFlock struct to store relevant data
 - [ ] Create node system to chunkify world map for A* pathfinding
 
-# HISTORY
+# DEPENDENCIES
+- [Emscripten SDK](https://github.com/emscripten-core/emsdk)
 
+# HISTORY
 ### v0.0.5 - A* Tile Costs
 ![2500 entities avoiding sand like the plague](./docs/0.0.5.gif)
 
