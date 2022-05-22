@@ -20,6 +20,8 @@ jobs:
       s3-bucket: 'keeper.ziru.link'
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
 
       - name: EMCC Build
         run: ./bin/build.sh
